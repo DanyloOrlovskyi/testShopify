@@ -280,7 +280,7 @@
                           {% endif %}
                         {% endif %}
                       {% endfor %}
-                      <input data-collection='{{ product.collections }}'
+                      <input data-collection='{{ product | json }}'
                         class="quantity__input"
                         type="number"
                         name="quantity"
