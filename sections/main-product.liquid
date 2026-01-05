@@ -277,7 +277,7 @@
                       {% else %}
                         {% assign min_qty = 1 %}
                       {% endif %}
-                      <input data-collection="{{ product_collection }}"
+                      <input data-collection="{{ collections | json }}"
                         class="quantity__input"
                         type="number"
                         name="quantity"
