@@ -271,14 +271,20 @@
                           {{- 'icon-minus.svg' | inline_asset_content -}}
                         </span>
                       </button>
+                      {% assign product_collection = collections[product.type] %}
+                      {% if product_collection.metafields.custom.qty_min_limit.value %}
+                        {% assign min_qty = product_collection.metafields.custom.qty_min_limit.value %}
+                      {% else %}
+                        {% assign min_qty = 1 %}
+                      {% endif %}
                       <input
                         class="quantity__input"
                         type="number"
                         name="quantity"
                         id="Quantity-{{ section.id }}"
                         data-cart-quantity="{{ cart_qty }}"
-                        data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
-                        min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                        data-min="{{ min_qty }}"
+                        min="{{ min_qty }}"
                         {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
                           data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
                           max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
