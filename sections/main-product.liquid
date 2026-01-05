@@ -275,7 +275,7 @@
                       {% for product_collection in product.collections %}
                         {% if product_collection.metafields.custom.qty_min_limit.value %}
                           {% assign current_min = product_collection.metafields.custom.qty_min_limit.value | plus: 0 %}
-                          {% if current_min > min_qty %}
+                          {% if current_min < min_qty %}
                             {% assign min_qty = current_min %}
                           {% endif %}
                         {% endif %}
