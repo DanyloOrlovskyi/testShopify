@@ -56,6 +56,27 @@
         "show_text_below": false
       }
     },
+    "best_sellers_3pGpiP": {
+      "type": "best-sellers",
+      "blocks": {
+        "collection_Eh99LW": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "collection_title": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_Eh99LW"
+      ],
+      "name": "Best sellers",
+      "settings": {
+        "section_label": "Best sellers",
+        "title": "Trending Products"
+      }
+    },
     "2_col_slider_dB7nQ4": {
       "type": "2-col-slider",
       "blocks": {
@@ -269,6 +290,7 @@
   },
   "order": [
     "image_banner",
+    "best_sellers_3pGpiP",
     "2_col_slider_dB7nQ4",
     "rich_text",
     "featured_collection",
