@@ -6,7 +6,6 @@ if (!customElements.get("best-sellers")) {
         super();
 
         this.modalOpenClass = "best-sellers-modal-open";
-        this.onKeyDown = this.handleKeyDown.bind(this);
         this.isInitialized = false;
       }
 
@@ -140,15 +139,6 @@ if (!customElements.get("best-sellers")) {
         this.modal.classList.remove("is-open");
         this.modal.setAttribute("aria-hidden", "true");
         document.body.classList.remove(this.modalOpenClass);
-      }
-
-      handleKeyDown(event) {
-        if (
-          event.key === "Escape" &&
-          this.modal?.classList.contains("is-open")
-        ) {
-          this.closeModal();
-        }
       }
     },
   );
