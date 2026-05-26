@@ -144,6 +144,7 @@
 }
 
 .best-sellers__tag {
+  min-width: 63px;
   padding: 8px 16px;
   border: 1px solid var(--best-sellers-border-gray);
   border-radius: var(--best-sellers-radius-sm);
