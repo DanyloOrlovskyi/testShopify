@@ -157,6 +157,7 @@
 
 .best-sellers__tag--sale {
   background: var(--best-sellers-red);
+  border-color: var(--best-sellers-red);
   color: #ffffff;
 }
 
