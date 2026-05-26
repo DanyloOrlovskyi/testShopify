@@ -62,14 +62,32 @@
         "collection_Eh99LW": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "mantra-rings",
+            "collection_title": "",
+            "product": ""
+          }
+        },
+        "collection_BGGecL": {
+          "type": "collection",
+          "settings": {
+            "collection": "charitybands®",
+            "collection_title": "",
+            "product": ""
+          }
+        },
+        "collection_fWWPFE": {
+          "type": "collection",
+          "settings": {
+            "collection": "statement-collection",
             "collection_title": "",
             "product": ""
           }
         }
       },
       "block_order": [
-        "collection_Eh99LW"
+        "collection_Eh99LW",
+        "collection_BGGecL",
+        "collection_fWWPFE"
       ],
       "name": "Best sellers",
       "settings": {
