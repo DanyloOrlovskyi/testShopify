@@ -1,23 +1,4 @@
 {
-  "sections": {
-    "featured_collection": {
-      "name": "Featured Collection",
-      "settings": {
-        "collection": {
-          "label": "Collection"
-        },
-        "hero_image": {
-          "label": "Collection custom image",
-          "info": "Overrides the collection image when set."
-        }
-      },
-      "presets": {
-        "default": {
-          "name": "Featured Collection"
-        }
-      }
-    }
-  },
   "general": {
     "404": "Not found",
     "article": "Article",
