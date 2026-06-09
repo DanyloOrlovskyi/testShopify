@@ -336,8 +336,8 @@ trend-products {
   }
 
   .trend-products__item {
-    width: 75vw;
-    max-width: 300px;
-    scroll-snap-align: start;
+      width: 84vw;
+      max-width: 315px;
+      scroll-snap-align: start;
   }
 }
