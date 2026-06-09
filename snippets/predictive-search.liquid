@@ -1,0 +1,114 @@
+{%- liquid
+  assign search_types = 'product'
+  if settings.predictive_search_articles
+    assign search_types = search_types | append: ',article'
+  endif
+  if settings.predictive_search_pages
+    assign search_types = search_types | append: ',page'
+  endif
+-%}
+
+<predictive-search
+  data-resources-type="{{ search_types }}"
+  data-money-format="{{ shop.money_format | escape }}"
+>
+  <script>
+    window.__predictiveSearchIcons = {
+      arrowRight: {{ 'icon-arrow-right.svg' | inline_asset_content | json }},
+      placeholderImage: {{ 'icon-placeholder-image.svg' | inline_asset_content | json }},
+      ellipse: {{ 'icon-ellipse.svg' | inline_asset_content | json }}
+    };
+  </script>
+  <button
+    class="header__search-btn predictive-search__toggle"
+    type="button"
+    aria-label="Open search"
+    aria-expanded="false"
+    aria-controls="predictive-search-dialog"
+  >
+    {{- 'icon-search.svg' | inline_asset_content -}}
+  </button>
+
+  <div
+    id="predictive-search-dialog"
+    class="predictive-search-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Search"
+    hidden
+  >
+    <div class="predictive-search">
+      <div class="predictive-search__input-row">
+        <span class="predictive-search__search-icon" aria-hidden="true">
+          {{- 'icon-search.svg' | inline_asset_content -}}
+        </span>
+
+        <input
+          class="predictive-search__input"
+          type="search"
+          name="q"
+          placeholder="Search for"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          role="combobox"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          aria-label="Search"
+        >
+
+        <div class="predictive-search__actions">
+          <button class="predictive-search__clear-btn" type="button" hidden>Clear</button>
+          <button class="predictive-search__close-btn" type="button" aria-label="Close search">
+            {{- 'icon-cross.svg' | inline_asset_content -}}
+          </button>
+        </div>
+      </div>
+
+      <div class="predictive-search__body">
+        <div class="predictive-search__initial">
+          {%- if settings.predictive_search_heading != blank -%}
+            <p class="predictive-search__most-searched-heading">
+              {{- settings.predictive_search_heading | escape -}}
+            </p>
+          {%- endif -%}
+
+          {%- if settings.predictive_search_links != blank -%}
+            <ul class="predictive-search__most-searched-links" role="list">
+              {%- for link in settings.predictive_search_links.links -%}
+                <li>
+                  <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        <div class="predictive-search__results" hidden>
+          <div
+            class="predictive-search__tabs"
+            role="tablist"
+            aria-label="Search result types"
+          >
+            <div class="predictive-search__tabs-inner"></div>
+          </div>
+          <div
+            class="predictive-search__results-list"
+            role="listbox"
+            aria-label="Search results"
+          ></div>
+        </div>
+
+        <div class="predictive-search__no-results" hidden>
+          <p>No results found</p>
+        </div>
+
+        <div class="predictive-search__footer" hidden>
+          <a class="predictive-search__see-all" href="#">See all results</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</predictive-search>

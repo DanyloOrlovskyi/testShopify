@@ -1,3 +1,5 @@
+{{ 'predictive-search.css' | asset_url | stylesheet_tag }}
+
 <header>
   <h2 class="header__title">
     {{ shop.name | link_to: routes.root_url }}
@@ -10,6 +12,8 @@
   </div>
 
   <div class="header__icons">
+    {%- render 'predictive-search' -%}
+
     {% if shop.customer_accounts_enabled %}
       {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
     {% endif %}
@@ -24,12 +28,16 @@
   </div>
 </header>
 
+<script src="{{ 'predictive-search.js' | asset_url }}" defer></script>
+
 {% stylesheet %}
   header {
     height: 5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    max-width: 100vw;
+    padding: 0 16px;
   }
   header a {
     position: relative;
@@ -48,6 +56,7 @@
   header .header__menu,
   header .header__icons {
     display: flex;
+    align-items: center;
     gap: 1rem;
   }
 {% endstylesheet %}
