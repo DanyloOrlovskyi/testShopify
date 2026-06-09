@@ -48,5 +48,12 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "sections": {
+    "trend_products": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "open_product": "View {{ product }}"
+    }
   }
 }
