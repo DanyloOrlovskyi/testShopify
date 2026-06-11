@@ -99,22 +99,23 @@
     </ul>
 
     {%- if available_variant != blank -%}
-      <button
-        class="product-card__addToCart"
-        type="button"
-        data-addToCart-btn
-        data-variant-id="{{ available_variant.id }}"
-        aria-label="Add {{ product.title | escape }} to cart"
-      >
-        <img
-          class="product-card__addToCart-icon"
-          src="{{ 'icon-cart.svg' | asset_url }}"
-          alt=""
-          width="20"
-          height="20"
-          aria-hidden="true"
+      <quick-view-opener data-product-handle="{{ product.handle }}">
+        <button
+          class="product-card__addToCart js-quick-view-button"
+          type="button"
+          data-variant-id="{{ available_variant.id }}"
+          aria-label="Add {{ product.title | escape }} to cart"
         >
-      </button>
+          <img
+            class="product-card__addToCart-icon"
+            src="{{ 'icon-cart.svg' | asset_url }}"
+            alt=""
+            width="20"
+            height="20"
+            aria-hidden="true"
+          >
+        </button>
+      </quick-view-opener>
     {%- endif -%}
   </a>
 
