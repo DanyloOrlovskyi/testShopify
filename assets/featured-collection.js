@@ -5,18 +5,18 @@ class FeaturedCollection extends HTMLElement {
   }
 
   initSwiper() {
-    const swiperEl = this.querySelector('.featured-collection__swiper');
+    const swiperEl = this.querySelector('.js-featured-collection-swiper');
     if (!swiperEl || typeof Swiper === 'undefined') return;
 
     this.swiper = new Swiper(swiperEl, {
       slidesPerView: 2,
       spaceBetween: 15,
       navigation: {
-        prevEl: this.querySelector('.featured-collection__nav--prev'),
-        nextEl: this.querySelector('.featured-collection__nav--next'),
+        prevEl: this.querySelector('.js-fectured-collection-nav-prev'),
+        nextEl: this.querySelector('.js-fectured-collection-nav-next'),
       },
       pagination: {
-        el: this.querySelector('.featured-collection__pagination'),
+        el: this.querySelector('.js-featured-collection-pagination'),
         clickable: true,
       },
       breakpoints: {
@@ -28,57 +28,63 @@ class FeaturedCollection extends HTMLElement {
   }
 
   bindEvents() {
-    this.addEventListener('click', (e) => {
-      const swatch = e.target.closest('[data-swatch-btn]');
-      if (swatch) { 
-        e.preventDefault(); this.handleSwatchClick(swatch); 
+    this.addEventListener('click', (event) => {
+      const triggeredSwatch = event.target.closest('[data-swatch-btn]');
+      if (triggeredSwatch) { 
+        event.preventDefault(); 
+        this.handleSwatchClick(triggeredSwatch); 
         return; 
       }
 
-      const atcBtn = e.target.closest('[data-atc-btn]');
-      if (atcBtn) { 
-        e.preventDefault(); this.handleAtcClick(atcBtn); 
+      const addToCartButton = event.target.closest('[data-addToCart-btn]');
+      if (addToCartButton) { 
+        event.preventDefault(); 
+        this.handleAddToCartClick(addToCartButton); 
       }
     });
   }
 
-  handleSwatchClick(swatch) {
-    const card = swatch.closest('.product-card');
+  handleSwatchClick(triggeredSwatch) {
+    const card = triggeredSwatch.closest('.product-card');
     if (!card) return;
 
-    const { imageId, variantId } = swatch.dataset;
+    const { imageId, variantId } = triggeredSwatch.dataset;
 
-    // Switch visible image
     card.querySelectorAll('[data-image-id]').forEach((img) => {
       img.classList.toggle('product-card__image--active', img.dataset.imageId === imageId);
     });
 
-    // Update active swatch highlight
-    card.querySelectorAll('[data-swatch-btn]').forEach((s) => {
-      s.classList.toggle('product-card__swatch--active', s === swatch);
+    card.querySelectorAll('[data-swatch-btn]').forEach((swatch) => {
+      swatch.classList.toggle('product-card__swatch--active', swatch === triggeredSwatch);
     });
 
-    // Sync ATC button to the variant matching the selected color
     if (variantId) {
-      const atcBtn = card.querySelector('[data-atc-btn]');
-      if (atcBtn) atcBtn.dataset.variantId = variantId;
+      const addToCartButton = card.querySelector('[data-addToCart-btn]');
+      if (addToCartButton) addToCartButton.dataset.variantId = variantId;
     }
   }
 
-  async handleAtcClick(btn) {
-    const variantId = btn.dataset.variantId;
-    if (!variantId || btn.classList.contains('product-card__atc--loading')) return;
+  async handleAddToCartClick(button) {
+    const variantId = button.dataset.variantId;
+    if (!variantId || button.disabled) return;
 
-    btn.classList.add('product-card__atc--loading');
+    button.disabled = true;
 
     try {
+      const formData = {
+        'items': [{
+          'id': parseInt(variantId, 10),
+          'quantity': 1
+        }]
+      };
+
       const res = await fetch('/cart/add.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 }),
+        body: JSON.stringify(formData),
       });
 
       let data;
@@ -92,18 +98,18 @@ class FeaturedCollection extends HTMLElement {
         throw new Error(data.description || data.message || 'Could not add to cart');
       }
 
-      btn.classList.add('product-card__atc--added');
+      button.classList.add('product-card__addToCart--added');
       FeaturedCollection.showToast('Added to cart');
       document.dispatchEvent(new CustomEvent('cart:updated'));
-      setTimeout(() => btn.classList.remove('product-card__atc--added'), 2000);
+      setTimeout(() => button.classList.remove('product-card__addToCart--added'), 2000);
 
     } catch (err) {
-      btn.classList.add('product-card__atc--error');
+      button.classList.add('product-card__addToCart--error');
       FeaturedCollection.showToast(err.message || 'Could not add to cart', 'error');
-      setTimeout(() => btn.classList.remove('product-card__atc--error'), 2000);
+      setTimeout(() => button.classList.remove('product-card__addToCart--error'), 2000);
 
     } finally {
-      btn.classList.remove('product-card__atc--loading');
+      button.disabled = false;
     }
   }
 

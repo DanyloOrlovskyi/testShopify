@@ -1,19 +1,6 @@
-{%- comment -%}
-  Product card for the Featured Collection slider.
-  Expects: product
-{%- endcomment -%}
-
-{%- liquid
-  assign is_sale = false
-  if product.compare_at_price > product.price
-    assign is_sale = true
-  endif
-
-  assign atc_variant = product.first_available_variant | default: product.variants.first
--%}
+{%- assign available_variant = product.selected_or_first_available_variant -%}
 
 <div class="product-card">
-  {%- comment -%} Image area — ratio set via --ratio-percent CSS variable (Dawn pattern) {%- endcomment -%}
   <a
     class="product-card__image-link"
     href="{{ product.url }}"
@@ -21,79 +8,98 @@
     style="--ratio-percent: 100%;"
   >
     {%- comment -%}
-      Render one <img> per unique variant image for JS show/hide via data-image-id.
-      Uses responsive-image snippet (srcset + Dawn conditional widths).
+      Render one <img> per unique variant image for JS show/hide via data-image-id..
       Falls back to product.featured_image or placeholder if no images.
     {%- endcomment -%}
     {%- assign rendered_image_ids = '' -%}
     {%- assign first_image_rendered = false -%}
     {%- for variant in product.variants -%}
-      {%- assign vimg = variant.featured_image | default: product.featured_image -%}
-      {%- if vimg != blank -%}
-        {%- assign vimg_id = vimg.id | append: '' -%}
-        {%- unless rendered_image_ids contains vimg_id -%}
-          {%- assign rendered_image_ids = rendered_image_ids | append: vimg_id | append: ',' -%}
+      {%- assign variant_img = variant.featured_image | default: product.featured_image -%}
+      {%- if variant_img != blank -%}
+        {%- assign variant_img_id = variant_img.id | append: '' -%}
+        {%- unless rendered_image_ids contains variant_img -%}
+          {%- assign rendered_image_ids = rendered_image_ids | append: variant_img_id | append: ',' -%}
           {%- if first_image_rendered -%}
             {%- assign img_class = 'product-card__image' -%}
           {%- else -%}
             {%- assign img_class = 'product-card__image product-card__image--active' -%}
           {%- endif -%}
-          {%-
-            render 'responsive-image',
-            image: vimg,
-            class: img_class,
-            sizes: '(min-width: 769px) calc((100vw - 464px) / 3), 50vw',
-            loading: 'lazy',
-            alt: vimg.alt | default: product.title,
-            data_image_id: vimg.id
-          -%}
+          <picture class="{{ img_class }}" data-image-id="{{ variant_img_id }}">
+            <source
+              media="(max-width: 420px)"
+              srcset="
+                {{ variant_img | image_url: width: 360 }} 1x,
+                {{ variant_img | image_url: width: 720 }} 2x
+              "
+            >
+            <img
+              src="{{ variant_img | image_url: width: 1200 }}"
+              srcset="
+                {{ variant_img | image_url: width: 1200 }} 1x,
+                {{ variant_img | image_url: width: 2400 }} 2x
+              "
+              alt="{{ variant_img.alt | escape }}"
+              width="{{ variant_img.width }}"
+              height="{{ variant_img.height }}"
+              loading="lazy"
+            >
+          </picture>
           {%- assign first_image_rendered = true -%}
         {%- endunless -%}
       {%- endif -%}
     {%- endfor -%}
 
-    {%- comment -%} Fallback: product.featured_image or SVG placeholder {%- endcomment -%}
     {%- unless first_image_rendered -%}
       {%- if product.featured_image != blank -%}
-        {%-
-          render 'responsive-image',
-          image: product.featured_image,
-          class: 'product-card__image product-card__image--active',
-          sizes: '(min-width: 769px) calc((100vw - 464px) / 3), 50vw',
-          loading: 'lazy',
-          alt: product.featured_image.alt | default: product.title,
-          data_image_id: product.featured_image.id
-        -%}
+        <picture class="product-card__image product-card__image--active">
+          <source
+            media="(max-width: 420px)"
+            srcset="
+              {{ variant_img | image_url: width: 360 }} 1x,
+              {{ variant_img | image_url: width: 720 }} 2x
+            "
+          >
+          <img
+            src="{{ variant_img | image_url: width: 1200 }}"
+            srcset="
+              {{ variant_img | image_url: width: 1200 }} 1x,
+              {{ variant_img | image_url: width: 2400 }} 2x
+            "
+            alt="{{ variant_img.alt | escape }}"
+            width="{{ variant_img.width }}"
+            height="{{ variant_img.height }}"
+            loading="lazy"
+          >
+        </picture>
       {%- else -%}
         {{ 'product-apparel-1' | placeholder_svg_tag: 'product-card__placeholder' }}
       {%- endif -%}
     {%- endunless -%}
 
-    {%- comment -%}
-      Tags overlay — max 3 product tags
-    {%- endcomment -%}
-    <div class="product-card__tags">
+    <ul class="product-card__tags">
       {%- for tag in product.tags limit: 3 -%}
         {%- assign tag_lower = tag | downcase -%}
-        {%- if tag_lower == 'sale' -%}
-          <span class="product-card__tag product-card__tag--sale">{{ tag }}</span>
-        {%- else -%}
-          <span class="product-card__tag">{{ tag }}</span>
-        {%- endif -%}
+        <li
+          class="
+            product-card__tag
+            {% if tag_lower == 'sale' %}product-card__tag--sale{% endif %}
+          "
+        >
+          {{ tag }}
+        </li>
       {%- endfor -%}
-    </div>
+    </ul>
 
-    {%- comment -%} Add to cart button {%- endcomment -%}
-    {%- if atc_variant != blank -%}
+    {%- if available_variant != blank -%}
       <button
-        class="product-card__atc"
+        class="product-card__addToCart"
         type="button"
-        data-atc-btn
-        data-variant-id="{{ atc_variant.id }}"
+        data-addToCart-btn
+        data-variant-id="{{ available_variant.id }}"
         aria-label="Add {{ product.title | escape }} to cart"
       >
         <img
-          class="product-card__atc-icon"
+          class="product-card__addToCart-icon"
           src="{{ 'icon-cart.svg' | asset_url }}"
           alt=""
           width="20"
@@ -104,29 +110,27 @@
     {%- endif -%}
   </a>
 
-  {%- comment -%} Info area {%- endcomment -%}
   <div class="product-card__info">
     {%- comment -%}
-      Color swatches — same approach as Shopify Dawn theme.
       swatch_value priority: swatch.image → swatch.color.rgb → name-to-hex fallback.
       Passed as CSS variable --swatch-bg on the button element.
       Image for JS swap: first variant whose option at this position matches the value name.
     {%- endcomment -%}
     {%- for option in product.options_with_values -%}
-      {%- if option.name == 'Color' or option.name == 'Colour' -%}
-        {%- assign color_opt_pos = option.position | minus: 1 -%}
+      {%- if option.name == 'Color' -%}
+        {%- assign color_option_position = option.position | minus: 1 -%}
         <div class="product-card__swatches" role="list" aria-label="Colors">
           {%- for option_value in option.values -%}
             {%- liquid
               assign matching_variant = null
               for variant in product.variants
-                if matching_variant == null and variant.options[color_opt_pos] == option_value.name
+                if matching_variant == null and variant.options[color_option_position] == option_value.name
                   assign matching_variant = variant
                 endif
               endfor
               assign swatch_img = matching_variant.featured_image | default: product.featured_image
               if option_value.swatch.image
-                assign swatch_image_url = option_value.swatch.image | image_url: width: 50
+                assign swatch_image_url = option_value.swatch.image | image_url: width: 24
                 assign swatch_value = 'url(' | append: swatch_image_url | append: ')'
               elsif option_value.swatch.color
                 assign swatch_value = option_value.swatch.color
@@ -134,7 +138,6 @@
                 assign swatch_value = '#BCBBB9'
               endif
             -%}
-
             <button
               class="product-card__swatch{% if forloop.first %} product-card__swatch--active{% endif %}"
               type="button"
@@ -151,12 +154,10 @@
       {%- endif -%}
     {%- endfor -%}
 
-    {%- comment -%} Title {%- endcomment -%}
     <a class="product-card__title" href="{{ product.url }}">{{ product.title | escape }}</a>
 
-    {%- comment -%} Price {%- endcomment -%}
     <div class="product-card__price">
-      {%- if is_sale -%}
+      {%- if product.compare_at_price > product.price -%}
         <span class="product-card__price-sale">{{ product.price | money }}</span>
         <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
       {%- else -%}
