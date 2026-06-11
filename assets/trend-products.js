@@ -1,64 +1,72 @@
 class TrendProducts extends HTMLElement {
   connectedCallback() {
+    this.selectors = {
+      addToCartButton: ".js-trend-product-add-to-cart-button",
+      hotspot: ".js-trend-product-hotspot",
+      hotspotWrapper: ".js-trend-products-hotspot-wrapper",
+      popup: ".js-trend-products-popup",
+      toast: ".trend-products-toast"
+    };
+
     this.activePopup = null;
     this.activeHotspot = null;
 
-    this._boundOnClick = this._onClick.bind(this);
-    this._boundOnKeydown = this._onKeydown.bind(this);
-    this._boundOnOutsideClick = this._onOutsideClick.bind(this);
+    this.boundOnClick = this.onClick.bind(this);
+    this.boundOnKeydown = this.onKeydown.bind(this);
+    this.boundOnOutsideClick = this.onOutsideClick.bind(this);
 
-    this.addEventListener('click', this._boundOnClick);
-    document.addEventListener('keydown', this._boundOnKeydown);
-    document.addEventListener('click', this._boundOnOutsideClick);
+    this.addEventListener('click', this.boundOnClick);
+    document.addEventListener('keydown', this.boundOnKeydown);
+    document.addEventListener('click', this.boundOnOutsideClick);
   }
 
   disconnectedCallback() {
-    this.removeEventListener('click', this._boundOnClick);
-    document.removeEventListener('keydown', this._boundOnKeydown);
-    document.removeEventListener('click', this._boundOnOutsideClick);
-    this._closePopup();
+    this.removeEventListener('click', this.boundOnClick);
+    document.removeEventListener('keydown', this.boundOnKeydown);
+    document.removeEventListener('click', this.boundOnOutsideClick);
+    this.closePopup();
   }
 
-  _onClick(e) {
-    const hotspot = e.target.closest('.trend-products__hotspot');
+  onClick(e) {
+    const hotspot = e.target.closest(this.selectors.hotspot);
     if (hotspot) {
       e.stopPropagation();
-      this._toggleHotspot(hotspot);
+      this.toggleHotspot(hotspot);
       return;
     }
 
-    const addBtn = e.target.closest('.trend-products__popup-btn[data-variant-id]');
+    const addBtn = e.target.closest(this.selectors.addToCartButton);
     if (addBtn) {
       e.stopPropagation();
-      this._addToCart(addBtn);
+      this.addToCart(addBtn);
     }
   }
 
-  _onKeydown(e) {
+  onKeydown(e) {
     if (e.key === 'Escape' && this.activePopup) {
-      this._closePopup();
+      this.closePopup();
     }
   }
 
-  _onOutsideClick(e) {
+  onOutsideClick(e) {
     if (!this.activePopup) return;
-    if (!e.target.closest('.trend-products__hotspot') && !e.target.closest('.trend-products__popup')) {
-      this._closePopup();
+    if (!e.target.closest(this.selectors.hotspot) && !e.target.closest(this.selectors.popup)) {
+      this.closePopup();
     }
   }
 
-  _toggleHotspot(hotspot) {
+  toggleHotspot(hotspot) {
     if (this.activeHotspot === hotspot) {
-      this._closePopup();
+      this.closePopup();
       return;
     }
 
     if (this.activePopup) {
-      this._closePopup();
+      this.closePopup();
     }
 
-    const popup = hotspot.nextElementSibling;
-    if (!popup?.classList.contains('trend-products__popup')) return;
+    const popup = hotspot.closest(this.selectors.hotspotWrapper).querySelector(this.selectors.popup);
+    if (!popup) return;
 
     hotspot.classList.add('trend-products__hotspot--active');
     hotspot.setAttribute('aria-expanded', 'true');
@@ -66,30 +74,39 @@ class TrendProducts extends HTMLElement {
 
     this.activeHotspot = hotspot;
     this.activePopup = popup;
-
-    popup.querySelector('a, button')?.focus();
   }
 
-  _closePopup() {
-    this.activeHotspot?.classList.remove('trend-products__hotspot--active');
-    this.activeHotspot?.setAttribute('aria-expanded', 'false');
-    this.activeHotspot?.focus();
-    this.activePopup?.classList.remove('trend-products__popup--visible');
-    this.activeHotspot = null;
-    this.activePopup = null;
+  closePopup() {
+    if (this.activeHotspot) {
+      this.activeHotspot.classList.remove('trend-products__hotspot--active');
+      this.activeHotspot.setAttribute('aria-expanded', 'false');
+      this.activeHotspot.focus();
+      this.activeHotspot = null;
+    }
+
+    if (this.activePopup) {
+      this.activePopup.classList.remove('trend-products__popup--visible');
+      this.activePopup = null;
+    }
   }
 
-  async _addToCart(btn) {
-    if (btn.disabled) return;
+  async addToCart(button) {
 
-    btn.disabled = true;
-    btn.classList.add('trend-products__popup-btn--loading');
+    button.disabled = true;
+    button.classList.add('trend-products__popup-btn--loading');
 
     try {
+      const formData = {
+      'items': [{
+        'id': button.dataset.variantId,
+        'quantity': 1
+        }]
+      };
+
       const response = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: btn.dataset.variantId, quantity: 1 }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
@@ -98,28 +115,24 @@ class TrendProducts extends HTMLElement {
         throw new Error(data.description || data.message || 'Could not add to cart.');
       }
 
-      this._showToast('Added to cart!');
+      this.showToast('Added to cart!');
       document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
     } catch (err) {
-      this._showToast(err.message || 'Something went wrong. Please try again.', true);
+      this.showToast(err.message || 'Something went wrong. Please try again.', true);
     } finally {
-      btn.disabled = false;
-      btn.classList.remove('trend-products__popup-btn--loading');
+      button.disabled = false;
+      button.classList.remove('trend-products__popup-btn--loading');
     }
   }
 
-  _showToast(message, isError = false) {
-    let toast = document.querySelector('.trend-products-toast');
+  showToast(message, isError = false) {
+    let toast = document.querySelector(this.selectors.toast);
 
     if (!toast) {
-      toast = document.createElement('div');
-      toast.className = 'trend-products-toast';
-      toast.setAttribute('role', isError ? 'alert' : 'status');
-      toast.setAttribute('aria-live', 'polite');
-      document.body.appendChild(toast);
+      return;
     }
 
-    clearTimeout(this._toastTimer);
+    clearTimeout(this.toastTimer);
     toast.classList.remove('trend-products-toast--visible', 'trend-products-toast--error');
 
     toast.textContent = message;
@@ -129,7 +142,7 @@ class TrendProducts extends HTMLElement {
       requestAnimationFrame(() => toast.classList.add('trend-products-toast--visible'));
     });
 
-    this._toastTimer = setTimeout(() => toast.classList.remove('trend-products-toast--visible'), 3000);
+    this.toastTimer = setTimeout(() => toast.classList.remove('trend-products-toast--visible'), 3000);
   }
 }
 

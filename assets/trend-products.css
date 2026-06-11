@@ -1,9 +1,5 @@
-trend-products {
-  display: block;
-}
-
 .trend-products {
-  padding: 0;
+  display: block;
 }
 
 .trend-products__container {
@@ -13,45 +9,52 @@ trend-products {
 }
 
 .trend-products__content {
-  margin-bottom: 32px;
+  margin: 0 auto 32px;
   padding: 0 20px;
   text-align: center;
   gap: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 660px;
+}
+
+.trend-products__content:empty{
+  display: none;
 }
 
 .trend-products__heading{
   font-weight: 500;
   font-size: 38px;
-  line-height: 46px;
+  line-height: 1.21;
   letter-spacing: 0%;
-}
-
-.trend-products__text{
-  max-width: 660px;
 }
 
 .trend-products__text p {
-  margin: 0;
+  margin-bottom: 16px;
   font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 1.5;
   letter-spacing: 0%;
   color: #535353;
+}
+
+.trend-products__text p:last-of-type{
+  margin: 0;
 }
 
 .trend-products__button {
   display: inline-block;
   font-size: 16px;
-  line-height: 24px;
+  line-height: 1.5;
   color: #000000;
   border: 1px solid #000000;
   border-radius: 100px;
   padding: 12px 32px;
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition-property: background-color, color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 }
 
 .trend-products__button:hover {
@@ -74,10 +77,11 @@ trend-products {
 .trend-products__image-wrapper {
   position: relative;
   width: 100%;
-  padding-bottom: 130%;
+  padding-bottom: 124%;
 }
 
-.trend-products__image-wrapper img {
+.trend-products__image-wrapper .trend-products__image img,
+.trend-products__image-wrapper .trend-products__image {
   position: absolute;
   top: 0;
   left: 0;
@@ -85,7 +89,8 @@ trend-products {
   height: 100%;
   object-fit: cover;
   display: block;
-    border-radius: 16px;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .trend-products__image-placeholder {
@@ -98,15 +103,8 @@ trend-products {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 16px;
 }
-
-.trend-products__image-placeholder svg {
-  width: 60px;
-  height: 60px;
-  opacity: 0.4;
-}
-
-/* Hotspot */
 
 .trend-products__hotspot {
   position: absolute;
@@ -120,7 +118,9 @@ trend-products {
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition-property: background-color, transform;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
   z-index: 2;
   padding: 0;
 }
@@ -145,8 +145,6 @@ trend-products {
 .trend-products__hotspot--active .trend-products__hotspot-icon {
   transform: rotate(45deg);
 }
-
-/* Popup */
 
 .trend-products__popup {
   position: absolute;
@@ -187,12 +185,19 @@ trend-products {
   display: block;
 }
 
-.trend-products__popup-image-link img {
+.trend-products__popup-image-link .trend-products__popup-image,
+.trend-products__popup-image-link .trend-products__popup-placeholder svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     position: static;
+    transition: transform .3s ease-in-out;
+}
+
+.trend-products__popup-image-link:hover .trend-products__popup-image,
+.trend-products__popup-image-link:hover .trend-products__popup-placeholder svg {
+    transform: scale(1.03);
 }
 
 .trend-products__popup-placeholder {
@@ -221,7 +226,7 @@ trend-products {
 
 .trend-products__popup-title {
   font-size: 14px;
-  line-height: 18px;
+  line-height: 1.28;
   color: #535353;
   text-decoration: none;
   overflow: hidden;
@@ -229,18 +234,26 @@ trend-products {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  transition-property: color, text-decoration;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.trend-products__popup-title:hover{
+  color: #000000;
+  text-decoration: underline;
 }
 
 .trend-products__popup-price {
   font-size: 14px;
-  line-height: 18px;
+  line-height: 1.28;
   font-weight: 500;
   color: #000000;
 }
 
 .trend-products__popup-btn {
   font-size: 14px;
-  line-height: 18px;
+  line-height: 1.28;
   color: #000000;
   background: none;
   border: none;
@@ -262,8 +275,6 @@ trend-products {
   cursor: wait;
 }
 
-/* Toast */
-
 .trend-products-toast {
   position: fixed;
   bottom: 32px;
@@ -274,12 +285,14 @@ trend-products {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
   padding: 14px 20px;
   font-size: 14px;
-  line-height: 18px;
+  line-height: 1.28;
   color: #000000;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition-property: opacity, transform;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
   z-index: 1000;
 }
 
@@ -291,8 +304,6 @@ trend-products {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
-/* Mobile */
 
 @media (max-width: 768px) {
   .trend-products {
@@ -309,14 +320,14 @@ trend-products {
 
   .trend-products__heading {
     font-size: 28px;
-    line-height: 34px;
+    line-height: 1.21;
   }
 
   .trend-products__button{
     padding: 16px 32px;
     font-weight: 500;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 1.5;
     letter-spacing: 0%;
   }
 
