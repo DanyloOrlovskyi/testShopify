@@ -11,7 +11,7 @@
     <div class="featured-collection__inner">
       <a class="featured-collection__banner" href="{{ collection.url }}">
         {%- if hero_image != blank -%}
-          <picture class="featured-collection__banner-image">
+          <picture class="featured-collection__banner-picture">
             <source
               media="(max-width: 420px)"
               srcset="
@@ -19,11 +19,19 @@
                 {{ hero_image | image_url: width: 720 }} 2x
               "
             >
-            <img
-              src="{{ hero_image | image_url: width: 1200 }}"
+            <source
+              media="(max-width: 768px)"
               srcset="
-                {{ hero_image | image_url: width: 1200 }} 1x,
-                {{ hero_image | image_url: width: 2400 }} 2x
+                {{ hero_image | image_url: width: 734 }} 1x,
+                {{ hero_image | image_url: width: 1468 }} 2x
+              "
+            >
+            <img
+              class="featured-collection__banner-picture__image"
+              src="{{ hero_image | image_url: width: 400 }}"
+              srcset="
+                {{ hero_image | image_url: width: 400 }} 1x,
+                {{ hero_image | image_url: width: 800 }} 2x
               "
               alt="{{ hero_image.alt | escape }}"
               width="{{ hero_image.width }}"
@@ -32,7 +40,7 @@
             >
           </picture>
         {%- else -%}
-          <div class="featured-collection__banner-image">
+          <div class="featured-collection__banner-picture">
             {{ 'collection-1' | placeholder_svg_tag }}
           </div>
         {%- endif -%}

@@ -20,9 +20,9 @@
         {%- unless rendered_image_ids contains variant_img -%}
           {%- assign rendered_image_ids = rendered_image_ids | append: variant_img_id | append: ',' -%}
           {%- if first_image_rendered -%}
-            {%- assign img_class = 'product-card__image' -%}
+            {%- assign img_class = 'product-card__picture' -%}
           {%- else -%}
-            {%- assign img_class = 'product-card__image product-card__image--active' -%}
+            {%- assign img_class = 'product-card__picture product-card__picture--active' -%}
           {%- endif -%}
           <picture class="{{ img_class }}" data-image-id="{{ variant_img_id }}">
             <source
@@ -32,11 +32,19 @@
                 {{ variant_img | image_url: width: 720 }} 2x
               "
             >
-            <img
-              src="{{ variant_img | image_url: width: 1200 }}"
+            <source
+              media="(max-width: 768px)"
               srcset="
-                {{ variant_img | image_url: width: 1200 }} 1x,
-                {{ variant_img | image_url: width: 2400 }} 2x
+                {{ variant_img | image_url: width: 360 }} 1x,
+                {{ variant_img | image_url: width: 720 }} 2x
+              "
+            >
+            <img
+              class="product-card__picture__image"
+              src="{{ variant_img | image_url: width: 350 }}"
+              srcset="
+                {{ variant_img | image_url: width: 350 }} 1x,
+                {{ variant_img | image_url: width: 700 }} 2x
               "
               alt="{{ variant_img.alt | escape }}"
               width="{{ variant_img.width }}"
