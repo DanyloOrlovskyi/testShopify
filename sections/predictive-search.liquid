@@ -1,0 +1,243 @@
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign products = predictive_search.resources.products
+    assign articles = predictive_search.resources.articles
+    assign pages = predictive_search.resources.pages
+    assign total_results = products.size | plus: articles.size | plus: pages.size
+
+    assign active_type = ''
+    if products.size > 0
+      assign active_type = 'products'
+    elsif articles.size > 0
+      assign active_type = 'articles'
+    elsif pages.size > 0
+      assign active_type = 'pages'
+    endif
+  -%}
+
+  {%- if total_results > 0 -%}
+    <div class="predictive-search__results" data-active-type="{{ active_type }}">
+      <div
+        class="predictive-search__tabs"
+        role="tablist"
+        tabindex="0"
+        aria-label="Search result types"
+      >
+        <div class="predictive-search__tabs-inner">
+          {%- if products.size > 0 -%}
+            <button
+              class="predictive-search__tab"
+              type="button"
+              role="tab"
+              data-tab="products"
+              aria-selected="{% if active_type == 'products' %}true{% else %}false{% endif %}"
+            >
+              Products
+            </button>
+          {%- endif -%}
+          {%- if articles.size > 0 -%}
+            <button
+              class="predictive-search__tab"
+              type="button"
+              role="tab"
+              data-tab="articles"
+              aria-selected="{% if active_type == 'articles' %}true{% else %}false{% endif %}"
+            >
+              Articles
+            </button>
+          {%- endif -%}
+          {%- if pages.size > 0 -%}
+            <button
+              class="predictive-search__tab"
+              type="button"
+              role="tab"
+              data-tab="pages"
+              aria-selected="{% if active_type == 'pages' %}true{% else %}false{% endif %}"
+            >
+              Pages
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if products.size > 0 -%}
+        <div
+          class="predictive-search__results-list"
+          role="listbox"
+          aria-label="Products"
+          data-tab-panel="products"
+          {% unless active_type == 'products' %}
+            hidden
+          {% endunless %}
+        >
+          {%- for product in products -%}
+            {%- liquid
+              assign on_sale = false
+              if product.compare_at_price > product.price
+                assign on_sale = true
+              endif
+            -%}
+            <div class="predictive-search__product-item" role="option">
+              <a class="predictive-search__product--link" href="{{ product.url }}">
+                <div class="predictive-search__product-image--wrapper">
+                  {%- if product.featured_media -%}
+                    <picture class="predictive-search__product-image--picture">
+                      <source
+                        media="(max-width: 420px)"
+                        srcset="
+                          {{ product.featured_media | image_url: width: 80, height: 80 }} 1x,
+                          {{ product.featured_media | image_url: width: 160, height: 160 }} 2x
+                        "
+                      >
+                      <img
+                        class="predictive-search__product-image--image"
+                        src="{{ product.featured_media | image_url: width: 120, height: 120 }}"
+                        srcset="
+                          {{ product.featured_media | image_url: width: 120, height: 120 }} 1x,
+                          {{ product.featured_media | image_url: width: 240, height: 240 }} 2x
+                        "
+                        alt="{{ product.featured_media.alt }}"
+                        width="{{ product.featured_media.width }}"
+                        height="{{ product.featured_media.height }}"
+                        loading="lazy"
+                      >
+                    </picture>
+                  {%- else -%}
+                    {{ 'icon-placeholder-image.svg' | inline_asset_content }}
+                  {%- endif -%}
+                </div>
+              </a>
+              <div class="predictive-search__product-info">
+                <a
+                  href="{{ product.url }}"
+                  class="predictive-search__product-title predictive-search__product--link"
+                >
+                  {{- product.title -}}
+                </a>
+                <p class="predictive-search__product-price{% if on_sale %} predictive-search__product-price--sale{% endif %}">
+                  {{ product.price | money }}
+                  {%- if on_sale -%}
+                    <s class="predictive-search__product-compare-price">{{ product.compare_at_price | money }}</s>
+                  {%- endif -%}
+                </p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if articles.size > 0 -%}
+        <div
+          class="predictive-search__results-list"
+          role="listbox"
+          aria-label="Articles"
+          data-tab-panel="articles"
+          {% unless active_type == 'articles' %}
+            hidden
+          {% endunless %}
+        >
+          {%- for article in articles -%}
+            <div class="predictive-search__article-item" role="option">
+              <a class="predictive-search__article--link" href="{{ article.url }}">
+                <div class="predictive-search__article-image--wrapper">
+                  {%- if article.image -%}
+                    <picture class="predictive-search__article-image--picture">
+                      <source
+                        media="(max-width: 420px)"
+                        srcset="
+                          {{ article.image | image_url: width: 80, height: 80 }} 1x,
+                          {{ article.image | image_url: width: 160, height: 160 }} 2x
+                        "
+                      >
+                      <img
+                        class="predictive-search__article-image--image"
+                        src="{{ article.image | image_url: width: 120, height: 120 }}"
+                        srcset="
+                          {{ article.image | image_url: width: 120, height: 120 }} 1x,
+                          {{ article.image | image_url: width: 240, height: 240 }} 2x
+                        "
+                        alt="{{ article.image.alt }}"
+                        width="{{ article.image.width }}"
+                        height="{{ article.image.height }}"
+                        loading="lazy"
+                      >
+                    </picture>
+                  {%- else -%}
+                    {{ 'icon-placeholder-image.svg' | inline_asset_content }}
+                  {%- endif -%}
+                </div>
+              </a>
+              <div class="predictive-search__article-info">
+                <p class="predictive-search__article-meta">
+                  {%- if article.published_at -%}
+                    <span>{{ article.published_at | date: '%b %-d, %Y' }}</span>
+                  {%- endif -%}
+                  {%- if article.published_at and article.author -%}
+                    {{ 'icon-ellipse.svg' | inline_asset_content }}
+                  {%- endif -%}
+                  {%- if article.author -%}
+                    <span>{{ article.author }}</span>
+                  {%- endif -%}
+                  {%- if article.comments_enabled and article.comments_count > 0 -%}
+                    {{ 'icon-ellipse.svg' | inline_asset_content }}
+                    <span>
+                      {{ article.comments_count }}
+                      {%- if article.comments_count == 1 -%}
+                        comment
+                      {%- else -%}
+                        comments
+                      {%- endif -%}
+                    </span>
+                  {%- endif -%}
+                </p>
+                <a class="predictive-search__article-title predictive-search__article--link" href="{{ article.url }}">
+                  {{- article.title -}}
+                </a>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if pages.size > 0 -%}
+        <div
+          class="predictive-search__results-list"
+          role="listbox"
+          aria-label="Pages"
+          data-tab-panel="pages"
+          {% unless active_type == 'pages' %}
+            hidden
+          {% endunless %}
+        >
+          {%- for page in pages -%}
+            <a href="{{ page.url }}" class="predictive-search__page-item" role="option">
+              <span>{{ page.title }}</span>
+              <span class="predictive-search__page-icon">
+                {{- 'icon-arrow-right.svg' | inline_asset_content -}}
+              </span>
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="predictive-search__footer">
+      <a
+        class="predictive-search__see-all"
+        href="{{ routes.search_url }}?q={{ predictive_search.terms | url_param_escape }}"
+      >
+        See all results
+      </a>
+    </div>
+  {%- else -%}
+    <div class="predictive-search__no-results">
+      <p>No results found</p>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search"
+}
+{% endschema %}
