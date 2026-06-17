@@ -1,0 +1,20 @@
+{%- if section.settings.note_enabled -%}
+  <div class="minicart__note-field--wrapper accordeon-wrapper">
+    <details class="accordeon">
+      <summary class="accordeon__trigger">
+        <span class="accordeon__trigger-icon">
+          {{ 'icon-plus.svg' | inline_asset_content }}
+        </span>
+        <span class="accordeon__trigger-title">{{ section.settings.add_note_label }}</span>
+      </summary>
+      <div class="accordeon__content">
+        <textarea
+          class="minicart__note--textarea js-minicart-note"
+          name="note"
+          rows="4"
+          placeholder="{{ section.settings.edit_note_label | escape }}"
+        >{{ cart.note }}</textarea>
+      </div>
+    </details>
+  </div>
+{%- endif -%}

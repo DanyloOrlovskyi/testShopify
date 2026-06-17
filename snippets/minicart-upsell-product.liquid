@@ -1,0 +1,54 @@
+{%- assign upsell_variant = product.selected_or_first_available_variant -%}
+{%- assign has_sale_price = false -%}
+{%- if product.compare_at_price > product.price -%}
+  {%- assign has_sale_price = true -%}
+{%- endif -%}
+
+<div class="minicart__upsell-product">
+  <a href="{{ product.url }}" class="minicart__upsell-product-media">
+    {%- if product.featured_image -%}
+      <picture class="minicart__upsell-product-media--picture">
+        <source
+          srcset="
+            {{ product.featured_image | image_url: width: 80, height: 80 }} 1x,
+            {{ product.featured_image | image_url: width: 160, height: 160 }} 2x
+          "
+        >
+        <img
+          class="minicart__upsell-product-media--image"
+          src="{{ product.featured_image | image_url: width: 80, height: 80 }}"
+          width="80"
+          height="80"
+          alt="{{ product.title | escape }}"
+          loading="lazy"
+        >
+      </picture>
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag }}
+    {%- endif -%}
+  </a>
+
+  <div class="minicart__upsell-product-info">
+    <a href="{{ product.url }}" class="minicart__upsell-product-title">{{ product.title }}</a>
+
+    <div class="minicart__upsell-product-footer">
+      <div class="minicart__upsell-product-price{% if has_sale_price %} is-sale{% endif %}">
+        {%- if has_sale_price -%}
+          <span class="minicart__upsell-product--compare-at">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="minicart__upsell-product--price">{{ product.price | money }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="minicart__upsell-product-add js-minicart-upsell-add"
+        data-variant-id="{{ upsell_variant.id }}"
+        {% unless upsell_variant.available %}
+          disabled
+        {% endunless %}
+      >
+        {%- if upsell_variant.available -%}Add to cart{%- else -%}Sold out{%- endif -%}
+      </button>
+    </div>
+  </div>
+</div>
