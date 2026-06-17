@@ -59,7 +59,6 @@ body.minicart-open{
     max-width: calc(100vw - 32px);
     height: calc(100vh - 32px);
     position: absolute;
-    right: 16px;
     top: 16px;
     border-radius: 16px;
     display: flex;
@@ -363,6 +362,25 @@ body.minicart-open{
     line-height: 1.3;
     color: #535353;
     text-align: center;
+}
+
+.minicart__free-shipping__congratulations{
+    font-weight: 500;
+    color: #000000;
+    padding-left: 23px;
+    position: relative;
+}
+
+.minicart__free-shipping__congratulations::before{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    background-image: url("data:image/svg+xml,%0A%3Csvg width='13' height='9' viewBox='0 0 13 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.4167 0.75L4.08333 8.08333L0.75 4.75' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
 }
 
 .minicart__free-shipping__message .minicart__free-shipping__money{

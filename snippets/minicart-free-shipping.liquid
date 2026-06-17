@@ -6,28 +6,26 @@
     assign free_shipping_text = section.settings.free_shipping_message | replace: '{amount}', free_shipping_remaining_money
   %}
   <div class="minicart__free-shipping">
-    {%- if cart.total_price >= threshold -%}
-      <div class="minicart__free-shipping__message">
+    <div class="minicart__free-shipping__message">
+      {%- if cart.total_price >= threshold -%}
         <span class="minicart__free-shipping__congratulations">
-          {{ section.settings.free_shipping_congratulations_message }}
+          {{- section.settings.free_shipping_congratulations_message -}}
         </span>
-      </div>
-    {%- else -%}
-      <div class="minicart__free-shipping__message">
+      {% else %}
         <span class="minicart__free-shipping__text">{{ free_shipping_text }}</span>
-      </div>
+      {% endif %}
+    </div>
+    <div
+      class="minicart__free-shipping__progress-bar"
+      style="background: {{ section.settings.free_shipping_progress_background }};"
+    >
       <div
-        class="minicart__free-shipping__progress-bar"
-        style="background: {{ section.settings.free_shipping_progress_background }};"
-      >
-        <div
-          class="minicart__free-shipping__progress-bar__fill"
-          style="
-            width: {{ cart.total_price | times: 100 | divided_by: threshold }}%;
-            background-color: {{ section.settings.free_shipping_progress_bar_fill_color }};
-          "
-        ></div>
-      </div>
-    {%- endif -%}
+        class="minicart__free-shipping__progress-bar__fill"
+        style="
+          width: {{ cart.total_price | times: 100 | divided_by: threshold }}%;
+          background-color: {{ section.settings.free_shipping_progress_bar_fill_color }};
+        "
+      ></div>
+    </div>
   </div>
 {%- endif -%}
