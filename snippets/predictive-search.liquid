@@ -1,0 +1,87 @@
+{%- liquid
+  assign search_types = 'product'
+  if settings.predictive_search_articles
+    assign search_types = search_types | append: ',article'
+  endif
+  if settings.predictive_search_pages
+    assign search_types = search_types | append: ',page'
+  endif
+-%}
+
+<predictive-search data-result-types="{{ search_types }}">
+  <button
+    class="predictive-search__toggler js-predictive-search-toggler"
+    type="button"
+    aria-label="Open search"
+    aria-expanded="false"
+  >
+    {{- 'icon-search.svg' | inline_asset_content -}}
+  </button>
+
+  <div
+    class="predictive-search js-predictive-search"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Search"
+    hidden
+  >
+    <div class="predictive-search__modal-wrapper">
+      <div class="predictive-search__input-row">
+        <span class="predictive-search__search-icon" aria-hidden="true">
+          {{- 'icon-search.svg' | inline_asset_content -}}
+        </span>
+
+        <input
+          class="predictive-search__input js-predictive-search-input"
+          type="search"
+          name="q"
+          placeholder="Search for"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          role="combobox"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          aria-label="Search"
+        >
+
+        <div class="predictive-search__actions">
+          <button class="predictive-search__clear-btn js-predictive-search-clear-btn" type="button" hidden>
+            Clear
+          </button>
+          <button
+            class="predictive-search__close-btn js-predictive-search-close-btn"
+            type="button"
+            aria-label="Close search"
+          >
+            {{- 'icon-cross.svg' | inline_asset_content -}}
+          </button>
+        </div>
+      </div>
+
+      <div class="predictive-search__body">
+        <div class="predictive-search__initial js-predictive-search-initial">
+          {%- if settings.predictive_search_heading != blank and settings.predictive_search_links != blank -%}
+            <p class="predictive-search__most-searched-heading">
+              {{- settings.predictive_search_heading -}}
+            </p>
+          {%- endif -%}
+
+          {%- if settings.predictive_search_links != blank -%}
+            <ul class="predictive-search__most-searched-links">
+              {%- for link in settings.predictive_search_links.links -%}
+                <li>
+                  <a class="predictive-search__most-searched-link" href="{{ link.url }}">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        <div class="predictive-search__search-results js-predictive-search-search-results" hidden></div>
+      </div>
+    </div>
+  </div>
+</predictive-search>
