@@ -37,24 +37,21 @@
           <div class="trend-products__item" {{ block.shopify_attributes }}>
             <div class="trend-products__image-wrapper">
               {%- if block_image != blank -%}
-                <picture class="trend-products__image">
+                <picture>
                   <source
-                    class="trend-products__image"
-                    media="(max-width: 420px)"
+                    media="(max-width: 768px)"
                     srcset="
-                      {{ block_image.url | image_url: width: 360 }} 1x,
-                      {{ block_image.url | image_url: width: 720 }} 2x
+                      {{ block_image | image_url: width: 315 }} 1x,
+                      {{ block_image | image_url: width: 630 }} 2x
                     "
                   >
-                  <img
-                    src="{{ block_image | image_url: width: 1200 }}"
+                  <img class="trend-products__image"
+                    src="{{ block_image | image_url: width: 400 }}"
                     srcset="
-                      {{ block_image | image_url: width: 1200 }} 1x,
-                      {{ block_image | image_url: width: 2400 }} 2x
+                      {{ block_image | image_url: width: 400 }} 1x,
+                      {{ block_image | image_url: width: 800 }} 2x
                     "
                     alt="{{ block_image.alt | escape }}"
-                    width="{{ block_image.width }}"
-                    height="{{ block_image.height }}"
                     loading="lazy"
                   >
                 </picture>
@@ -111,8 +108,8 @@
                                   {{ current_product.featured_image | image_url: width: 128 }} 2x
                                 "
                                 alt="{{ current_product.featured_image.alt | escape }}"
-                                width="{{ current_product.featured_image.width }}"
-                                height="{{ current_product.featured_image.height }}"
+                                width="64"
+                                height="64"
                                 loading="lazy"
                               >
                             </a>
