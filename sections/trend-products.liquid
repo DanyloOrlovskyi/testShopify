@@ -1,0 +1,314 @@
+{{ 'trend-products.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign section_heading = section.settings.heading
+  assign section_text = section.settings.text
+  assign section_button_label = section.settings.button_label
+  assign section_button_link = section.settings.button_link
+%}
+
+<trend-products class="trend-products" id="section-{{ section.id }}">
+  <div class="trend-products__container">
+    <div class="trend-products__content">
+      {%- if section_heading != blank -%}
+        <h2 class="trend-products__heading">{{ section_heading }}</h2>
+      {%- endif -%}
+
+      {%- if section_text != blank -%}
+        <div class="trend-products__text">{{ section_text }}</div>
+      {%- endif -%}
+
+      {%- if section_button_label != blank and section_button_link != blank -%}
+        <a
+          href="{{ section_button_link }}"
+          class="trend-products__button"
+        >
+          {{- section_button_label -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="trend-products__list">
+        {%- for block in section.blocks -%}
+          {% liquid
+            assign block_image = block.settings.image
+          %}
+          <div class="trend-products__item" {{ block.shopify_attributes }}>
+            <div class="trend-products__image-wrapper">
+              {%- if block_image != blank -%}
+                <picture>
+                  <source
+                    media="(max-width: 768px)"
+                    srcset="
+                      {{ block_image | image_url: width: 315 }} 1x,
+                      {{ block_image | image_url: width: 630 }} 2x
+                    "
+                  >
+                  <img class="trend-products__image"
+                    src="{{ block_image | image_url: width: 400 }}"
+                    srcset="
+                      {{ block_image | image_url: width: 400 }} 1x,
+                      {{ block_image | image_url: width: 800 }} 2x
+                    "
+                    alt="{{ block_image.alt | escape }}"
+                    loading="lazy"
+                  >
+                </picture>
+              {%- else -%}
+                <div class="trend-products__image-placeholder">
+                  {{ 'product-1' | placeholder_svg_tag }}
+                </div>
+              {%- endif -%}
+
+              {%- for i in (1..3) -%}
+                <div class="trend-products__hotspot-wrapper js-trend-products-hotspot-wrapper">
+                  {% liquid
+                    assign product_key = 'product_' | append: i
+                    assign spot_x_key = 'spot_' | append: i | append: '_x'
+                    assign spot_y_key = 'spot_' | append: i | append: '_y'
+
+                    assign current_product = block.settings[product_key]
+                    assign spot_x = block.settings[spot_x_key]
+                    assign spot_y = block.settings[spot_y_key]
+                  %}
+
+                  {%- if current_product != blank -%}
+                    <button
+                      class="trend-products__hotspot js-trend-product-hotspot"
+                      style="left: {{ spot_x }}%; top: {{ spot_y }}%;"
+                      aria-label="{{ 'sections.trend_products.open_product' | t: product: current_product.title | default: 'View product' }}"
+                      aria-expanded="false"
+                    >
+                      <span class="trend-products__hotspot-icon" aria-hidden="true">
+                        {{ 'icon-plus.svg' | inline_asset_content }}
+                      </span>
+                    </button>
+
+                    <div
+                      class="trend-products__popup js-trend-products-popup"
+                      style="left: {{ spot_x }}%; top: {{ spot_y }}%;"
+                      role="dialog"
+                      aria-label="{{ current_product.title }}"
+                    >
+                      <div class="trend-products__popup-inner">
+                        <div class="trend-products__popup-product">
+                          {%- if current_product.featured_image != blank -%}
+                            <a
+                              href="{{ current_product.url }}"
+                              class="trend-products__popup-image-link"
+                              tabindex="0"
+                              aria-label="{{ current_product.title }}"
+                            >
+                              <img
+                                class="trend-products__popup-image"
+                                src="{{ current_product.featured_image | image_url: width: 64 }}"
+                                srcset="
+                                  {{ current_product.featured_image | image_url: width: 64 }} 1x,
+                                  {{ current_product.featured_image | image_url: width: 128 }} 2x
+                                "
+                                alt="{{ current_product.featured_image.alt | escape }}"
+                                width="64"
+                                height="64"
+                                loading="lazy"
+                              >
+                            </a>
+                          {%- else -%}
+                            <div class="trend-products__popup-placeholder">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 525.5 525.5"
+                                aria-hidden="true"
+                                focusable="false"
+                              >
+                                <path d="M324.5 212.7H203c-1.6 0-2.8 1.3-2.8 2.8V308c0 1.6 1.3 2.8 2.8 2.8h121.5c1.6 0 2.8-1.3 2.8-2.8v-92.5c0-1.5-1.3-2.8-2.8-2.8zm1.1 95.3c0 .6-.5 1.1-1.1 1.1H203c-.6 0-1.1-.5-1.1-1.1v-92.5c0-.6.5-1.1 1.1-1.1h121.5c.6 0 1.1.5 1.1 1.1V308z"/>
+                                <path d="M210.4 299.5H240v.1s.1 0 .2-.1h75.2v-76.2h-105v76.2zm1.8-7.2l20-20c1-1 2.5-1 3.5 0l22.8 22.8 31.7-33.6c1-1.1 2.6-1.1 3.6-.1l.1.1 22.8 24.3v6.5h-104.5v.0zm101.4-61.7V282l-21.4-22.8-31.6 33.5-23-23c-1.4-1.4-3.8-1.3-5.2.1l-19.1 19.1v-52.9h100.3z"/>
+                                <circle cx="232.8" cy="257.4" r="10.7"/>
+                              </svg>
+                            </div>
+                          {%- endif -%}
+
+                          <div class="trend-products__popup-info">
+                            {% liquid
+                              if current_product.available
+                                assign button_text = 'sections.trend_products.add_to_cart' | t | default: 'Add to cart'
+                              else
+                                assign button_text = 'sections.trend_products.sold_out' | t | default: 'Sold out'
+                              endif
+                            %}
+                            <a
+                              href="{{ current_product.url }}"
+                              class="trend-products__popup-title"
+                            >
+                              {{- current_product.title -}}
+                            </a>
+                            <span class="trend-products__popup-price">
+                              {{- current_product.price | money -}}
+                            </span>
+                            <button
+                              class="trend-products__popup-btn js-trend-product-add-to-cart-button"
+                              data-variant-id="{{ current_product.first_available_variant.id }}"
+                              aria-label="{{ button_text }}: {{ current_product.title }}"
+                              {% if current_product.available == false %}
+                                disabled
+                              {% endif %}
+                            >
+                              {{ button_text }}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</trend-products>
+
+<script src="{{ 'trend-products.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Trend products",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Live inspired"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We are on a mission to inspire and empower with positive messages.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trend_item",
+      "name": "Trend item",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "spot_1_x",
+          "label": "Spot horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 30
+        },
+        {
+          "type": "range",
+          "id": "spot_1_y",
+          "label": "Spot vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 60
+        },
+        {
+          "type": "header",
+          "content": "Product 2"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "spot_2_x",
+          "label": "Spot horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "spot_2_y",
+          "label": "Spot vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 35
+        },
+        {
+          "type": "header",
+          "content": "Product 3"
+        },
+        {
+          "type": "product",
+          "id": "product_3",
+          "label": "Product"
+        },
+        {
+          "type": "range",
+          "id": "spot_3_x",
+          "label": "Spot horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "spot_3_y",
+          "label": "Spot vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 75
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trend products",
+      "blocks": [{ "type": "trend_item" }, { "type": "trend_item" }, { "type": "trend_item" }, { "type": "trend_item" }]
+    }
+  ]
+}
+{% endschema %}
