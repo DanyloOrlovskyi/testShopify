@@ -1,5 +1,5 @@
 {%- if section.settings.note_enabled -%}
-  <div class="minicart__note-field--wrapper accordeon-wrapper">
+  <div class="accordeon-wrapper">
     <details class="accordeon">
       <summary class="accordeon__trigger">
         <span class="accordeon__trigger-icon">
@@ -9,7 +9,7 @@
       </summary>
       <div class="accordeon__content">
         <textarea
-          class="minicart__note--textarea js-minicart-note"
+          class="minicart__note-textarea js-minicart-note"
           name="note"
           rows="4"
           placeholder="{{ section.settings.edit_note_label | escape }}"

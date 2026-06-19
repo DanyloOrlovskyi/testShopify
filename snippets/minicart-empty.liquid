@@ -1,22 +1,20 @@
 <div class="minicart__empty">
-  <div class="minicart__empty--body">
+  <div class="minicart__empty-body">
     <div class="minicart__empty-icon-wrapper">
-      <picture class="minicart__empty-icon">
-        <img
-          class="minicart__empty-icon--image"
-          src="{{ section.settings.empty_cart_icon | image_url: width: 80, height: 80 }}"
-          alt="{{ section.settings.empty_cart_icon.alt }}"
-          width="80"
-          height="80"
-        >
-      </picture>
+      <img
+        class="minicart__empty-icon-image"
+        src="{{ section.settings.empty_cart_icon | image_url: width: 80, height: 80 }}"
+        alt="{{ section.settings.empty_cart_icon.alt }}"
+        width="80"
+        height="80"
+      >
     </div>
     <h3 class="minicart__empty-title">{{ section.settings.empty_cart_heading }}</h3>
     <p class="minicart__empty-text">{{ section.settings.empty_cart_text }}</p>
   </div>
-  <div class="minicart__empty-swiper--wrapper">
-    <div class="minicart__empty-swiper--header">
-      <h3 class="minicart__empty-swiper--title">You may also like</h3>
+  <div class="minicart__empty-swiper-wrapper">
+    <div class="minicart__empty-swiper-header">
+      <h3 class="minicart__empty-swiper-title">You may also like</h3>
       <div class="minicart__slider-nav">
         <button type="button" class="minicart__slider-nav-btn js-minicart-empty-prev" aria-label="Previous">
           {{ 'icon-chevron-left.svg' | inline_asset_content }}

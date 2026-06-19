@@ -4,7 +4,7 @@
   <a
     class="product-card__image-link"
     href="{{ product.url }}"
-    aria-label="{{ product.title | escape }}"
+    aria-label="{{ product.title }}"
     style="--ratio-percent: 100%;"
   >
     {%- comment -%}
@@ -26,29 +26,20 @@
           {%- endif -%}
           <picture class="{{ img_class }}" data-image-id="{{ variant_img_id }}">
             <source
-              media="(max-width: 420px)"
-              srcset="
-                {{ variant_img | image_url: width: 360 }} 1x,
-                {{ variant_img | image_url: width: 720 }} 2x
-              "
-            >
-            <source
               media="(max-width: 768px)"
               srcset="
-                {{ variant_img | image_url: width: 360 }} 1x,
-                {{ variant_img | image_url: width: 720 }} 2x
+                {{ variant_img | image_url: width: 163 }} 1x,
+                {{ variant_img | image_url: width: 326 }} 2x
               "
             >
             <img
               class="product-card__picture__image"
-              src="{{ variant_img | image_url: width: 350 }}"
+              src="{{ variant_img | image_url: width: 208 }}"
               srcset="
-                {{ variant_img | image_url: width: 350 }} 1x,
-                {{ variant_img | image_url: width: 700 }} 2x
+                {{ variant_img | image_url: width: 208 }} 1x,
+                {{ variant_img | image_url: width: 416 }} 2x
               "
-              alt="{{ variant_img.alt | escape }}"
-              width="{{ variant_img.width }}"
-              height="{{ variant_img.height }}"
+              alt="{{ variant_img.alt }}"
               loading="lazy"
             >
           </picture>
@@ -59,24 +50,22 @@
 
     {%- unless first_image_rendered -%}
       {%- if product.image != blank -%}
-        <picture class="product-card__image product-card__image--active">
+        <picture>
           <source
-            media="(max-width: 420px)"
+            media="(max-width: 768px)"
             srcset="
-              {{ product.image | image_url: width: 360 }} 1x,
-              {{ product.image | image_url: width: 720 }} 2x
+              {{ product.image | image_url: width: 163 }} 1x,
+              {{ product.image | image_url: width: 326 }} 2x
             "
           >
           <img
             class="product-card__picture__image"
-            src="{{ product.image | image_url: width: 1200 }}"
+            src="{{ product.image | image_url: width: 208 }}"
             srcset="
-              {{ product.image | image_url: width: 1200 }} 1x,
-              {{ product.image | image_url: width: 2400 }} 2x
+              {{ product.image | image_url: width: 208 }} 1x,
+              {{ product.image | image_url: width: 416 }} 2x
             "
-            alt="{{ product.image.alt | escape }}"
-            width="{{ product.image.width }}"
-            height="{{ product.image.height }}"
+            alt="{{ product.image.alt }}"
             loading="lazy"
           >
         </picture>
@@ -104,7 +93,7 @@
         class="product-card__addToCart js-product-card-addToCart"
         type="button"
         data-variant-id="{{ available_variant.id }}"
-        aria-label="Add {{ product.title | escape }} to cart"
+        aria-label="Add {{ product.title }} to cart"
       >
         <img
           class="product-card__addToCart-icon"
@@ -152,8 +141,8 @@
               role="listitem"
               data-image-id="{{ swatch_img.id }}"
               data-variant-id="{{ matching_variant.id }}"
-              title="{{ option_value.name | escape }}"
-              aria-label="{{ option_value.name | escape }}"
+              title="{{ option_value.name }}"
+              aria-label="{{ option_value.name }}"
               style="--swatch-bg: {{ swatch_value }};"
             ></button>
           {%- endfor -%}
@@ -161,7 +150,7 @@
       {%- endif -%}
     {%- endfor -%}
 
-    <a class="product-card__title" href="{{ product.url }}">{{ product.title | escape }}</a>
+    <a class="product-card__title" href="{{ product.url }}">{{ product.title }}</a>
 
     <div class="product-card__price">
       {%- if product.compare_at_price > product.price -%}
