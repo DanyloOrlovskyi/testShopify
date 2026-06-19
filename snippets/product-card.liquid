@@ -25,13 +25,13 @@
             {%- assign img_class = 'product-card__picture product-card__picture--active' -%}
           {%- endif -%}
           <picture class="{{ img_class }}" data-image-id="{{ variant_img_id }}">
-            <source
-              media="(max-width: 420px)"
-              srcset="
-                {{ variant_img | image_url: width: 360 }} 1x,
-                {{ variant_img | image_url: width: 720 }} 2x
+              <source
+                      media="(max-width: 420px)"
+                      srcset="
+                {{ variant_img | image_url: width: 186 }} 1x,
+                {{ variant_img | image_url: width: 372 }} 2x
               "
-            >
+              >
             <source
               media="(max-width: 768px)"
               srcset="
@@ -41,14 +41,12 @@
             >
             <img
               class="product-card__picture__image"
-              src="{{ variant_img | image_url: width: 350 }}"
+              src="{{ variant_img | image_url: width: 400 }}"
               srcset="
-                {{ variant_img | image_url: width: 350 }} 1x,
-                {{ variant_img | image_url: width: 700 }} 2x
+                {{ variant_img | image_url: width: 400 }} 1x,
+                {{ variant_img | image_url: width: 800 }} 2x
               "
               alt="{{ variant_img.alt | escape }}"
-              width="{{ variant_img.width }}"
-              height="{{ variant_img.height }}"
               loading="lazy"
             >
           </picture>

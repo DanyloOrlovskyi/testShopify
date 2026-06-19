@@ -30,6 +30,14 @@
 }
 
 .featured-collection__banner::before{
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    padding-bottom: 125%;
+}
+
+.featured-collection__banner::after{
   content: '';
   position: absolute;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
@@ -45,14 +53,7 @@
   height: 100%;
   display: block;
   transition: transform 0.3s ease;
-}
-
-.featured-collection__banner-picture::before{
-  content: '';
-  display: block;
-  width: 0;
-  height: 0;
-  padding-bottom: var(--ratio-percent, 125%);
+  object-fit: cover;
 }
 
 .featured-collection__banner-picture,
@@ -507,7 +508,7 @@
     left: 8px;
     top: 8px;
   }
-  .featured-collection__banner::before {
+  .featured-collection__banner::after {
     height: 128px;
   }
   .featured-collection__banner-title{
