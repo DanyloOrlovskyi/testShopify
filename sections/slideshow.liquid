@@ -1,0 +1,100 @@
+{{ 'slideshow.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign height_mode = section.settings.slideshow_height
+  assign autoplay_speed = section.settings.autoplay_speed
+  assign autoplay = section.settings.autoplay
+%}
+
+<slideshow-component
+  hidden
+  data-height-mode="{{ height_mode }}"
+  {% if autoplay %}
+    data-autoplay-speed="{{ autoplay_speed }}"
+  {% endif %}
+>
+  <div class="swiper slideshow-swiper js-swiper-container {% if height_mode == 'auto' %}slideshow-swiper--height-auto{% endif %}">
+    <div class="swiper-wrapper slideshow-swiper--wrapper">
+      {% content_for 'blocks' %}
+    </div>
+
+    <div class="slideshow-swiper__pagination swiper-pagination js-slideshow-pagination"></div>
+
+    <div class="slideshow-swiper__control--button slideshow-swiper__button-prev js-slideshow-button-prev">
+      {{ 'icon-arrow-left.svg' | inline_asset_content }}
+    </div>
+    <div class="slideshow-swiper__control--button slideshow-swiper__button-next js-slideshow-button-next">
+      {{ 'icon-arrow-right.svg' | inline_asset_content }}
+    </div>
+  </div>
+</slideshow-component>
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "slideshow_image"
+    },
+    {
+      "type": "slideshow_html_video"
+    },
+    {
+      "type": "slideshow_embed_video"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "slideshow_height",
+      "label": "Slideshow height",
+      "default": "100%",
+      "options": [
+        {
+          "value": "100%",
+          "label": "100%"
+        },
+        {
+          "value": "auto",
+          "label": "Adapt height to first image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "blocks": [
+        {
+          "type": "slideshow_image",
+          "name": "Image"
+        },
+        {
+          "type": "slideshow_html_video",
+          "name": "HTML video"
+        },
+        {
+          "type": "slideshow_embed_video",
+          "name": "Embed video"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,204 @@
+{% liquid
+  assign desktop_aspect_ratio = block.settings.image_desktop.height | times: 100.0 | divided_by: block.settings.image_desktop.width | round: 0
+  assign mobile_aspect_ratio = block.settings.image_mobile.height | times: 100.0 | divided_by: block.settings.image_mobile.width | round: 0
+%}
+
+<div
+  class="slideshow-swiper__slide slideshow-swiper__slider-image js-slideshow-swiper-slide"
+  style="
+    --heading-color: {{ block.settings.heading_color }};
+    --description-color: {{ block.settings.description_color }};
+    --button-text-color: {{ block.settings.button_text_color }};
+    --button-background-color: {{ block.settings.button_background_color }};
+    --text-alignment: {{ block.settings.text_alignment }};
+    --text-alignment-mobile: {{ block.settings.text_alignment_mobile }};
+  "
+>
+  <div class="slideshow-swiper__slide--overlay" style="background-color: {{ block.settings.overlay_color }}"></div>
+  <picture
+    class="slideshow-swiper__slide-image--picture js-media-element"
+    data-aspect-ratio="{{ desktop_aspect_ratio }}"
+    data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
+  >
+    <source
+      media="(max-width: 768px)"
+      srcset="
+        {{ block.settings.image_mobile | image_url: width: 747 }} 1x,
+        {{ block.settings.image_mobile | image_url: width: 1494 }} 2x
+      "
+    >
+    <img
+      class="slideshow-swiper__slide-image--image"
+      src="{{ block.settings.image_desktop | image_url: width: 1600 }}"
+      srcset="
+        {{ block.settings.image_desktop | image_url: width: 1600 }} 1x,
+        {{ block.settings.image_desktop | image_url: width: 3200 }} 2x
+      "
+      alt="{{ block.settings.image_desktop }}"
+      width="1600"
+      height="600"
+    >
+  </picture>
+
+  <div class="slideshow-swiper__slide-content">
+    <h2 class="slideshow-swiper__slide-content--heading">{{ block.settings.heading }}</h2>
+
+    <p class="slideshow-swiper__slide-content--description">{{ block.settings.description }}</p>
+
+    <div class="slideshow-swiper__slide-content-button--wrapper">
+      <a class="slideshow-swiper__slide-content--button" href="{{ block.settings.button_link }}">
+        {{- block.settings.button_label -}}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Slideshow image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)"
+    },
+    {
+      "type": "header",
+      "content": "Background overlay settings"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Color",
+      "default": "rgba(0, 0, 0, 0.3)"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Button settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color_background",
+      "id": "button_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text alignment settings"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Desktop",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment_mobile",
+      "label": "Mobile",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "start"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image",
+      "settings": {
+        "image_desktop": "shopify://shop_images/slideshow-image.jpg",
+        "image_mobile": "shopify://shop_images/slideshow-image-mobile.jpg",
+        "overlay_color": "rgba(0, 0, 0, 0.3)",
+        "heading": "Satisfy your top obsession with the range of new arrivals",
+        "description": "Satisfy your top obsession with the range of new arrivals",
+        "button_label": "Shop Now",
+        "button_link": "#",
+        "button_text_color": "#000000",
+        "button_background_color": "#ffffff",
+        "text_alignment": "start",
+        "text_alignment_mobile": "center"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,253 @@
+{% liquid
+  assign desktop_aspect_ratio = 600 | times: 100.0 | divided_by: 1600 | round: 0
+  assign mobile_aspect_ratio = 600 | times: 100.0 | divided_by: 343 | round: 0
+%}
+
+<div
+  class="slideshow-swiper__slide slideshow-swiper__slider-embed-video js-slideshow-swiper-slide"
+  style="
+    --heading-color: {{ block.settings.heading_color }};
+    --description-color: {{ block.settings.description_color }};
+    --button-text-color: {{ block.settings.button_text_color }};
+    --button-background-color: {{ block.settings.button_background_color }};
+    --text-alignment: {{ block.settings.text_alignment }};
+    --text-alignment-mobile: {{ block.settings.text_alignment_mobile }};
+  "
+>
+  <div class="slideshow-swiper__slide--overlay" style="background-color: {{ block.settings.overlay_color }}"></div>
+
+  {%- if block.settings.video != blank -%}
+    {%- if block.settings.video.type == 'youtube' -%}
+      <iframe
+        data-aspect-ratio="{{ desktop_aspect_ratio }}"
+        data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
+        class="slideshow-swiper__slider-embed-video--iframe desktop js-media-element"
+        width="1600"
+        height="600"
+        src="https://www.youtube.com/embed/{{ block.settings.video.id }}?enablejsapi=1&controls=0&autoplay=1&loop=1&playlist={{ block.settings.video.id }}&mute=1&playsinline=1"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      >
+      </iframe>
+
+    {%- elsif block.settings.video.type == 'vimeo' -%}
+      <iframe
+        data-aspect-ratio="{{ desktop_aspect_ratio }}"
+        data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
+        class="slideshow-swiper__slider-embed-video--iframe desktop js-media-element"
+        width="1600"
+        height="600"
+        src="https://player.vimeo.com/video/{{ block.settings.video.id }}?api=1&autoplay=1&loop=1&autopause=0&controls=0&muted=1&playsinline=1&background=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+        frameborder="0"
+        loading="lazy"
+        allowfullscreen
+      >
+      </iframe>
+    {%- endif -%}
+  {% endif %}
+
+  {%- if block.settings.video_mobile != blank -%}
+    {%- if block.settings.video_mobile.type == 'youtube' -%}
+      <iframe
+        data-aspect-ratio="{{ mobile_aspect_ratio }}"
+        data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
+        class="slideshow-swiper__slider-embed-video--iframe mobile js-media-element"
+        width="343"
+        height="600"
+        src="https://www.youtube.com/embed/{{ block.settings.video_mobile.id }}?enablejsapi=1&controls=0&autoplay=1&loop=1&playlist={{ block.settings.video_mobile.id }}&mute=1&playsinline=1"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      >
+      </iframe>
+
+    {%- elsif block.settings.video_mobile.type == 'vimeo' -%}
+      <iframe
+        data-aspect-ratio="{{ mobile_aspect_ratio }}"
+        data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
+        class="slideshow-swiper__slider-embed-video--iframe mobile js-media-element"
+        width="343"
+        height="600"
+        src="https://player.vimeo.com/video/{{ block.settings.video_mobile.id }}?api=1&autoplay=1&loop=1&autopause=0&controls=0&muted=1&playsinline=1&background=1"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope;"
+        frameborder="0"
+        loading="lazy"
+        allowfullscreen
+      >
+      </iframe>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="slideshow-swiper__slide-content">
+    <h2 class="slideshow-swiper__slide-content--heading">{{ block.settings.heading }}</h2>
+
+    <p class="slideshow-swiper__slide-content--description">{{ block.settings.description }}</p>
+
+    <div class="slideshow-swiper__slide-content-button--wrapper">
+      <a class="slideshow-swiper__slide-content--button" href="{{ block.settings.button_link }}">
+        {{- block.settings.button_label -}}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Slideshow embed video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video settings"
+    },
+    {
+      "type": "video_url",
+      "id": "video",
+      "label": "Video",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "video_url",
+      "id": "video_mobile",
+      "label": "Video Mobile",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "header",
+      "content": "Background overlay settings"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Color",
+      "default": "rgba(0, 0, 0, 0.3)"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#fff"
+    },
+    {
+      "type": "header",
+      "content": "Button settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color_background",
+      "id": "button_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text alignment settings"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment_mobile",
+      "label": "Mobile",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Embed video",
+      "settings": {
+        "video": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "overlay_color": "rgba(0, 0, 0, 0.3)",
+        "heading": "Satisfy your top obsession with the range of new arrivals",
+        "heading_color": "#fff",
+        "description": "Satisfy your top obsession with the range of new arrivals",
+        "description_color": "#fff",
+        "button_label": "Shop Now",
+        "button_link": "#",
+        "button_text_color": "#000000",
+        "button_background_color": "#ffffff",
+        "text_alignment": "left",
+        "text_alignment_mobile": "left"
+      }
+    }
+  ]
+}
+{% endschema %}
