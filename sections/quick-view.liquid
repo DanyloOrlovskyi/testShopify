@@ -18,20 +18,20 @@
       <div class="quick-view__media">
         {%- if product.media.size > 0 -%}
           <div class="quick-view__slider">
-            <button class="quick-view__nav quick-view__nav--prev js-media-nav-prev" type="button" aria-label="Previous">
+            <button class="quick-view__nav quick-view__nav-prev js-media-nav-prev" type="button" aria-label="Previous">
               {{ 'icon-arrow-left.svg' | inline_asset_content }}
             </button>
-            <button class="quick-view__nav quick-view__nav--next js-media-nav-next" type="button" aria-label="Next">
+            <button class="quick-view__nav quick-view__nav-next js-media-nav-next" type="button" aria-label="Next">
               {{ 'icon-arrow-right.svg' | inline_asset_content }}
             </button>
-            <div class="quick-view__slider--wrapper">
+            <div class="quick-view__slider-wrapper js-quick-view-slider-wrapper">
               <div class="swiper-wrapper">
                 {%- for media in product.media -%}
                   <div class="swiper-slide">
                     <div class="quick-view__frame">
                       {%- case media.media_type -%}
                         {%- when 'image' -%}
-                          <picture class="quick-view__frame-media">
+                          <picture>
                             <source
                               media="(max-width: 420px)"
                               srcset="
@@ -47,7 +47,7 @@
                               "
                             >
                             <img
-                              class="quick-view__frame-media__img"
+                              class="quick-view__frame-media"
                               src="{{ media | image_url: width: 455 }}"
                               alt="{{ media.alt }}"
                               width="{{ media.width }}"
@@ -80,7 +80,7 @@
               </div>
               <div class="quick-view__pagination js-media-pagination"></div>
             </div>
-            <div class="quick-view__slider--thumbs">
+            <div class="quick-view__slider-thumbs js-quick-view-slider-thumbs">
               <div class="swiper-wrapper">
                 {%- for media in product.media -%}
                   <div class="swiper-slide">
@@ -109,7 +109,7 @@
             </div>
           </div>
         {%- else -%}
-          <div class="quick-view__frame quick-view__frame--placeholder">
+          <div class="quick-view__frame quick-view__frame-placeholder">
             {{ 'product-apparel-1' | placeholder_svg_tag }}
           </div>
         {%- endif -%}
@@ -246,7 +246,7 @@
 
           <div class="quick-view__actions">
             <button
-              class="quick-view__button--add-to-cart"
+              class="quick-view__add-to-cart-button"
               type="submit"
               name="add"
               {% unless product.available %}

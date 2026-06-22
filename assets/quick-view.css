@@ -83,8 +83,8 @@ body.quick-view-open {
   width: 100%;
 }
 
-.quick-view__slider--wrapper,
-.quick-view__slider--thumbs {
+.quick-view__slider-wrapper,
+.quick-view__slider-thumbs {
   width: 100%;
   overflow: hidden;
 }
@@ -100,7 +100,6 @@ body.quick-view-open {
 }
 
 .quick-view__frame .quick-view__frame-media,
-.quick-view__frame .quick-view__frame-media__img,
 .quick-view__frame svg {
   position: absolute;
   inset: 0;
@@ -110,11 +109,11 @@ body.quick-view-open {
   border: 0;
 }
 
-.quick-view__frame--placeholder {
+.quick-view__frame-placeholder {
   margin: 0;
 }
 
-.quick-view__slider--wrapper {
+.quick-view__slider-wrapper {
   border-radius: 16px;
 }
 
@@ -133,20 +132,21 @@ body.quick-view-open {
   border-radius: 12px;
   cursor: pointer;
   padding: 0;
-  transition-property: opacity, background-color;
+  transition-property: opacity, background-color, transform;
   transition-duration: 0.3s;
   transition-timing-function: ease;
 }
 
 .quick-view__nav:hover {
   background-color: #F6F6F6;
+  transform: translateY(-50%) scale(1.02);
 }
 
-.quick-view__nav--prev {
+.quick-view__nav-prev {
   left: 16px;
 }
 
-.quick-view__nav--next {
+.quick-view__nav-next {
   right: 16px;
 }
 
@@ -180,7 +180,7 @@ body.quick-view-open {
   border-radius: 16px;
 }
 
-.quick-view__slider--thumbs {
+.quick-view__slider-thumbs {
   margin-top: 16px;
 }
 
@@ -203,7 +203,7 @@ body.quick-view-open {
   object-fit: cover;
 }
 
-.quick-view__slider--thumbs .swiper-slide-thumb-active .quick-view__thumb {
+.quick-view__slider-thumbs .swiper-slide-thumb-active .quick-view__thumb {
   border-color: #000000;
 }
 
@@ -475,7 +475,7 @@ body.quick-view-open {
   gap: 12px;
 }
 
-.quick-view__button--add-to-cart {
+.quick-view__add-to-cart-button {
   width: 100%;
   padding: 16px;
   background: #000000;
@@ -488,11 +488,11 @@ body.quick-view-open {
   transition: opacity 0.3s ease;
 }
 
-.quick-view__button--add-to-cart:hover {
+.quick-view__add-to-cart-button:hover {
   opacity: 0.85;
 }
 
-.quick-view__button--add-to-cart[disabled] {
+.quick-view__add-to-cart-button[disabled] {
   cursor: not-allowed;
   opacity: 0.5;
 }

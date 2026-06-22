@@ -4,45 +4,47 @@
 -%}
 
 {{ 'featured-collection.css' | asset_url | stylesheet_tag }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
 {%- if collection != blank -%}
-  <featured-collection class="featured-collection" id="featured-collection-{{ section.id }}">
-    <div class="featured-collection__inner">
+  <featured-collection class="featured-collection" id="featured-collection-{{ section.id }}" hidden>
+    <div class="featured-collection__inner-wrapper">
       <a class="featured-collection__banner" href="{{ collection.url }}">
         {%- if hero_image != blank -%}
-          <picture class="featured-collection__banner-picture">
+          <picture>
             <source
               media="(max-width: 420px)"
               srcset="
-                {{ hero_image | image_url: width: 360 }} 1x,
-                {{ hero_image | image_url: width: 720 }} 2x
+                {{ hero_image | image_url: width: 388 }} 1x,
+                {{ hero_image | image_url: width: 776 }} 2x
               "
             >
             <source
               media="(max-width: 768px)"
               srcset="
-                {{ hero_image | image_url: width: 734 }} 1x,
-                {{ hero_image | image_url: width: 1468 }} 2x
+                {{ hero_image | image_url: width: 735 }} 1x,
+                {{ hero_image | image_url: width: 1470 }} 2x
+              "
+            >
+            <source
+              media="(max-width: 1080px)"
+              srcset="
+                {{ hero_image | image_url: width: 260 }} 1x,
+                {{ hero_image | image_url: width: 520 }} 2x
               "
             >
             <img
-              class="featured-collection__banner-picture__image"
+              class="featured-collection__banner-image"
               src="{{ hero_image | image_url: width: 400 }}"
               srcset="
                 {{ hero_image | image_url: width: 400 }} 1x,
                 {{ hero_image | image_url: width: 800 }} 2x
               "
-              alt="{{ hero_image.alt | escape }}"
-              width="{{ hero_image.width }}"
-              height="{{ hero_image.height }}"
+              alt="{{ hero_image.alt }}"
               loading="lazy"
             >
           </picture>
         {%- else -%}
-          <div class="featured-collection__banner-picture">
-            {{ 'collection-1' | placeholder_svg_tag }}
-          </div>
+          {{ 'collection-1' | placeholder_svg_tag }}
         {%- endif -%}
         <div class="featured-collection__banner-content">
           <p class="featured-collection__banner-title">{{ collection.title }}</p>
@@ -82,7 +84,6 @@
   </featured-collection>
 {%- endif -%}
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="{{ 'featured-collection.js' | asset_url }}" defer></script>
 <script src="{{ 'quick-view.js' | asset_url }}" defer></script>
 

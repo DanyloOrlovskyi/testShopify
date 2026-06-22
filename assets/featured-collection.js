@@ -2,6 +2,8 @@ class FeaturedCollection extends HTMLElement {
   connectedCallback() {
     this.initSwiper();
     this.bindEvents();
+
+    this.removeAttribute('hidden');
   }
 
   initSwiper() {
@@ -50,7 +52,7 @@ class FeaturedCollection extends HTMLElement {
 
     const { imageId, variantId } = triggeredSwatch.dataset;
 
-    card.querySelectorAll('[data-image-id]').forEach((img) => {
+    card.querySelectorAll('.js-product-card-image').forEach((img) => {
       img.classList.toggle('product-card__image--active', img.dataset.imageId === imageId);
     });
 

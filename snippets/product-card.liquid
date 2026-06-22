@@ -4,85 +4,61 @@
   <a
     class="product-card__image-link"
     href="{{ product.url }}"
-    aria-label="{{ product.title | escape }}"
+    aria-label="{{ product.title }}"
     style="--ratio-percent: 100%;"
   >
-    {%- comment -%}
-      Render one <img> per unique variant image for JS show/hide via data-image-id..
-      Falls back to product.featured_image or placeholder if no images.
-    {%- endcomment -%}
-    {%- assign rendered_image_ids = '' -%}
-    {%- assign first_image_rendered = false -%}
-    {%- for variant in product.variants -%}
-      {%- assign variant_img = variant.featured_image | default: product.featured_image -%}
-      {%- if variant_img != blank -%}
-        {%- assign variant_img_id = variant_img.id | append: '' -%}
-        {%- unless rendered_image_ids contains variant_img -%}
-          {%- assign rendered_image_ids = rendered_image_ids | append: variant_img_id | append: ',' -%}
-          {%- if first_image_rendered -%}
-            {%- assign img_class = 'product-card__picture' -%}
-          {%- else -%}
-            {%- assign img_class = 'product-card__picture product-card__picture--active' -%}
-          {%- endif -%}
-          <picture class="{{ img_class }}" data-image-id="{{ variant_img_id }}">
-            <source
-              media="(max-width: 420px)"
-              srcset="
-                {{ variant_img | image_url: width: 360 }} 1x,
-                {{ variant_img | image_url: width: 720 }} 2x
-              "
-            >
-            <source
-              media="(max-width: 768px)"
-              srcset="
-                {{ variant_img | image_url: width: 360 }} 1x,
-                {{ variant_img | image_url: width: 720 }} 2x
-              "
-            >
-            <img
-              class="product-card__picture__image"
-              src="{{ variant_img | image_url: width: 350 }}"
-              srcset="
-                {{ variant_img | image_url: width: 350 }} 1x,
-                {{ variant_img | image_url: width: 700 }} 2x
-              "
-              alt="{{ variant_img.alt | escape }}"
-              width="{{ variant_img.width }}"
-              height="{{ variant_img.height }}"
-              loading="lazy"
-            >
-          </picture>
-          {%- assign first_image_rendered = true -%}
-        {%- endunless -%}
-      {%- endif -%}
-    {%- endfor -%}
+    {%- if product.featured_image == blank -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+    {%- else -%}
+      {%- assign is_first_image = true -%}
 
-    {%- unless first_image_rendered -%}
-      {%- if product.featured_image != blank -%}
-        <picture class="product-card__image product-card__image--active">
+      {%- for variant in product.variants -%}
+        {% liquid
+          assign variant_img = variant.featured_image | default: product.featured_image
+          assign img_class = 'product-card__image js-product-card-image'
+          if is_first_image
+            assign img_class = img_class | append: ' product-card__image--active'
+          endif
+        %}
+
+        <picture>
           <source
             media="(max-width: 420px)"
+            srcset="
+              {{ variant_img | image_url: width: 186 }} 1x,
+              {{ variant_img | image_url: width: 372 }} 2x
+            "
+          >
+          <source
+            media="(max-width: 768px)"
             srcset="
               {{ variant_img | image_url: width: 360 }} 1x,
               {{ variant_img | image_url: width: 720 }} 2x
             "
           >
-          <img
-            src="{{ variant_img | image_url: width: 1200 }}"
+          <source
+            media="(max-width: 1080px)"
             srcset="
-              {{ variant_img | image_url: width: 1200 }} 1x,
-              {{ variant_img | image_url: width: 2400 }} 2x
+              {{ variant_img | image_url: width: 247 }} 1x,
+              {{ variant_img | image_url: width: 494 }} 2x
             "
-            alt="{{ variant_img.alt | escape }}"
-            width="{{ variant_img.width }}"
-            height="{{ variant_img.height }}"
+          >
+          <img
+            class="{{ img_class }}"
+            data-image-id="{{ variant_img.id }}"
+            src="{{ variant_img | image_url: width: 350 }}"
+            srcset="
+              {{ variant_img | image_url: width: 350 }} 1x,
+              {{ variant_img | image_url: width: 700 }} 2x
+            "
+            alt="{{ variant_img.alt }}"
             loading="lazy"
           >
         </picture>
-      {%- else -%}
-        {{ 'product-apparel-1' | placeholder_svg_tag: 'product-card__placeholder' }}
-      {%- endif -%}
-    {%- endunless -%}
+
+        {%- assign is_first_image = false -%}
+      {%- endfor -%}
+    {%- endif -%}
 
     <ul class="product-card__tags">
       {%- for tag in product.tags limit: 3 -%}

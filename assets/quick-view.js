@@ -43,8 +43,8 @@
         qty_minus: this.querySelector('.js-qty-minus'),
         qty_plus: this.querySelector('.js-qty-plus'),
         close: this.querySelectorAll('.js-quick-view-close'),
-        slider_main: this.querySelector('.quick-view__slider--wrapper'),
-        slider_thumbs: this.querySelector('.quick-view__slider--thumbs'),
+        slider_main: this.querySelector('.js-quick-view-slider-wrapper'),
+        slider_thumbs: this.querySelector('.js-quick-view-slider-thumbs'),
         slider_nav_prev: this.querySelector('.js-media-nav-prev'),
         slider_nav_next: this.querySelector('.js-media-nav-next'),
         slider_pagination: this.querySelector('.js-media-pagination'),
@@ -94,10 +94,10 @@
         qty_input.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
-      qty_input.addEventListener('change', () => qty_minus_btn?.toggleAttribute('disabled', getCurrentValue() <= min_value));
+      qty_input.addEventListener('change', () => qty_minus_btn.toggleAttribute('disabled', getCurrentValue() <= min_value));
       qty_input.addEventListener('input', () => setQuantity(getCurrentValue()));
-      qty_minus_btn?.addEventListener('click', () => setQuantity(getCurrentValue() - 1));
-      qty_plus_btn?.addEventListener('click', () => setQuantity(getCurrentValue() + 1));
+      qty_minus_btn.addEventListener('click', () => setQuantity(getCurrentValue() - 1));
+      qty_plus_btn.addEventListener('click', () => setQuantity(getCurrentValue() + 1));
     }
 
     initSlider() {
@@ -106,8 +106,6 @@
 
       const thumbsEl = this.selectors.slider_thumbs;
       const isDesktop = window.innerWidth >= 769;
-
-      console.log('thumbsEl', window.innerWidth);
       
       if (isDesktop && thumbsEl) {
         this.thumbsSlider = new Swiper(thumbsEl, {
@@ -122,7 +120,7 @@
 
       this.mainSlider = new Swiper(mainEl, {
         loop: false,
-        spaceBetween: 0,
+        spaceBetween: 8,
         navigation: {
           prevEl: this.selectors.slider_nav_prev,
           nextEl: this.selectors.slider_nav_next,
