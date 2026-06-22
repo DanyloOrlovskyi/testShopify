@@ -4,7 +4,7 @@
 %}
 
 <div
-  class="slideshow-swiper__slide slideshow-swiper__slider-image js-slideshow-swiper-slide"
+  class="slideshow-swiper__slide js-slideshow-swiper-slide"
   style="
     --heading-color: {{ block.settings.heading_color }};
     --description-color: {{ block.settings.description_color }};
@@ -14,41 +14,45 @@
     --text-alignment-mobile: {{ block.settings.text_alignment_mobile }};
   "
 >
-  <div class="slideshow-swiper__slide--overlay" style="background-color: {{ block.settings.overlay_color }}"></div>
+  <div class="slideshow-swiper__slide-overlay" style="background-color: {{ block.settings.overlay_color }}"></div>
   <picture
-    class="slideshow-swiper__slide-image--picture js-media-element"
+    class="js-media-element"
     data-aspect-ratio="{{ desktop_aspect_ratio }}"
     data-aspect-ratio-mobile="{{ mobile_aspect_ratio }}"
   >
     <source
       media="(max-width: 768px)"
       srcset="
-        {{ block.settings.image_mobile | image_url: width: 747 }} 1x,
-        {{ block.settings.image_mobile | image_url: width: 1494 }} 2x
+        {{ block.settings.image_mobile | image_url: width: 735 }} 1x,
+        {{ block.settings.image_mobile | image_url: width: 1470 }} 2x
       "
     >
     <img
-      class="slideshow-swiper__slide-image--image"
+      class="slideshow-swiper__slide-image"
       src="{{ block.settings.image_desktop | image_url: width: 1600 }}"
       srcset="
         {{ block.settings.image_desktop | image_url: width: 1600 }} 1x,
         {{ block.settings.image_desktop | image_url: width: 3200 }} 2x
       "
       alt="{{ block.settings.image_desktop }}"
-      width="1600"
-      height="600"
     >
   </picture>
 
   <div class="slideshow-swiper__slide-content">
-    <h2 class="slideshow-swiper__slide-content--heading">{{ block.settings.heading }}</h2>
+    {% if block.settings.heading != blank %}
+      <h2 class="slideshow-swiper__slide-content-heading">{{ block.settings.heading }}</h2>
+    {% endif %}
 
-    <p class="slideshow-swiper__slide-content--description">{{ block.settings.description }}</p>
+    {% if block.settings.description != blank %}
+      <p class="slideshow-swiper__slide-content-description">{{ block.settings.description }}</p>
+    {% endif %}
 
-    <div class="slideshow-swiper__slide-content-button--wrapper">
-      <a class="slideshow-swiper__slide-content--button" href="{{ block.settings.button_link }}">
-        {{- block.settings.button_label -}}
-      </a>
+    <div class="slideshow-swiper__slide-content-button-wrapper">
+      {% if block.settings.button_label != blank %}
+        <a class="slideshow-swiper__slide-content-button" href="{{ block.settings.button_link }}">
+          {{- block.settings.button_label -}}
+        </a>
+      {% endif %}
     </div>
   </div>
 </div>

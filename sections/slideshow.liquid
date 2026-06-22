@@ -14,16 +14,16 @@
   {% endif %}
 >
   <div class="swiper slideshow-swiper js-swiper-container {% if height_mode == 'auto' %}slideshow-swiper--height-auto{% endif %}">
-    <div class="swiper-wrapper slideshow-swiper--wrapper">
+    <div class="swiper-wrapper">
       {% content_for 'blocks' %}
     </div>
 
     <div class="slideshow-swiper__pagination swiper-pagination js-slideshow-pagination"></div>
 
-    <div class="slideshow-swiper__control--button slideshow-swiper__button-prev js-slideshow-button-prev">
+    <div class="slideshow-swiper__control-button slideshow-swiper__button-prev js-slideshow-button-prev">
       {{ 'icon-arrow-left.svg' | inline_asset_content }}
     </div>
-    <div class="slideshow-swiper__control--button slideshow-swiper__button-next js-slideshow-button-next">
+    <div class="slideshow-swiper__control-button slideshow-swiper__button-next js-slideshow-button-next">
       {{ 'icon-arrow-right.svg' | inline_asset_content }}
     </div>
   </div>
