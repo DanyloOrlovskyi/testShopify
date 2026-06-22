@@ -1,8 +1,5 @@
 class Slideshow extends HTMLElement {
   connectedCallback() {
-    const blocks = this.querySelectorAll('.shopify-block');
-    blocks.forEach(block => block.classList.add('swiper-slide'));
-
     this.selectors = {
       swiperContainer: this.querySelector('.js-swiper-container'),
       pagination: this.querySelector('.js-slideshow-pagination'),
