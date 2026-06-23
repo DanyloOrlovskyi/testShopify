@@ -171,34 +171,34 @@
                       {%- liquid
                         if value.swatch.image
                           assign swatch_url = value.swatch.image | image_url: width: 60, height: 60
-                          assign swatch_bg = 'url(' | append: swatch_url | append: ')'
-                        elsif value.swatch.color
-                          assign swatch_bg = value.swatch.color
+                          assign swatch_image = 'url(' | append: swatch_url | append: ')'
                         else
-                          assign swatch_bg = '#BCBBB9'
+                          assign swatch_color = value.swatch.color
                         endif
 
-                        assign option_id = option.name | append: '-' | append: value.name | escape
+                        assign option_id = option.name | prepend: 'quick-view-' | append: '-' | append: value.name | escape
                       -%}
                       <label
                         class="quick-view__swatch {% unless value.available %} quick-view__swatch--disabled{% endunless %}"
                         title="{{ value.name }}"
                         for="{{ option_id }}"
-                        tabindex="0"
                       >
                         <input
                           type="radio"
                           id="{{ option_id }}"
                           class="quick-view__swatch-input"
-                          name="{{ option.name }}{{ option.position }}"
+                          name="option{{ option.position }}"
                           value="{{ value.name }}"
                           {% if value.selected %}
                             checked
                           {% endif %}
                         >
                         <span
-                          class="quick-view__swatch-visual {% if value.swatch.image %}quick-view__swatch-visual--swatch-image{% endif %}"
-                          style="--swatch-bg: {{ swatch_bg }};"
+                          class="quick-view__swatch-visual"
+                          style="
+                            --swatch-color: {{ swatch_color }};
+                            --swatch-image: {{ swatch_image }};
+                          "
                         ></span>
                         <span class="quick-view__swatch-tooltip">{{ value.name }}</span>
                       </label>
@@ -208,18 +208,17 @@
                   <div class="quick-view__pills">
                     {%- for value in option.values -%}
                       {%- liquid
-                        assign option_id = option.name | append: '-' | append: value.name | escape
+                        assign option_id = option.name | prepend: 'quick-view-' | append: '-' | append: value.name | escape
                       -%}
                       <label
                         class="quick-view__pill{% unless value.available %} quick-view__pill--disabled{% endunless %}"
                         for="{{ option_id }}"
-                        tabindex="0"
                       >
                         <input
                           type="radio"
                           id="{{ option_id }}"
                           class="quick-view__pill-input"
-                          name="{{ option.name }}{{ option.position }}"
+                          name="option{{ option.position }}"
                           value="{{ value.name }}"
                           {% if value.selected %}
                             checked

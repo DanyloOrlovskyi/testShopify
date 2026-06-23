@@ -105,17 +105,14 @@
       if (!mainEl) return;
 
       const thumbsEl = this.selectors.slider_thumbs;
-      const isDesktop = window.innerWidth >= 769;
       
-      if (isDesktop && thumbsEl) {
+      if (thumbsEl) {
         this.thumbsSlider = new Swiper(thumbsEl, {
           slidesPerView: 6,
           spaceBetween: 8,
           freeMode: true,
           watchSlidesProgress: true,
         });
-      } else {
-        thumbsEl?.remove();
       }
 
       this.mainSlider = new Swiper(mainEl, {
