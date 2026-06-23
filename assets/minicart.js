@@ -4,12 +4,12 @@ class UpsellSlider {
     this.prevEl = prevEl;
     this.nextEl = nextEl;
     this.options = options;
-    this.instance = null;
+    this.swiperSlider = null;
   }
 
   init() {
     if (!this.container || typeof Swiper === 'undefined') return;
-    this.instance = new Swiper(this.container, {
+    this.swiperSlider = new Swiper(this.container, {
       spaceBetween: 16,
       ...this.options,
       navigation: { prevEl: this.prevEl, nextEl: this.nextEl },
@@ -17,8 +17,7 @@ class UpsellSlider {
   }
 
   destroy() {
-    this.instance?.destroy(true, true);
-    this.instance = null;
+    this.swiperSlider?.destroy(true, true);
   }
 }
 
