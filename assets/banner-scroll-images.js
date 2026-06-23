@@ -7,7 +7,7 @@ class BannerScrollImages extends HTMLElement {
             thirdCol: this.querySelector('.js-banner-scroll-col--third'),
             blocksWrapper: this.querySelector('.js-banner-scroll-images-blocks'),
         }
-        this.scrollSpeed = 0.25;
+        this.scrollSpeed = 0.3;
         this.init();
     }
 
