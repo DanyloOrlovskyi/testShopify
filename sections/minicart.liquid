@@ -1,0 +1,231 @@
+{%- assign item_count = cart.item_count -%}
+
+<cart-drawer
+  class="minicart js-minicart"
+  data-item-count="{{ item_count }}"
+>
+  <div class="minicart__overlay js-minicart-close"></div>
+  <div class="minicart__drawer">
+    <div class="minicart__header">
+      <span class="minicart__title">
+        {{ section.settings.minicart_title }}
+        <span class="minicart__quantity js-minicart-quantity"> ({{ item_count }}) </span>
+      </span>
+      <button type="button" class="minicart__close-button js-minicart-close" aria-label="Close minicart">
+        {{ 'icon-cross.svg' | inline_asset_content }}
+      </button>
+    </div>
+
+    <div class="minicart__body">
+      {% if item_count > 0 %}
+        {% render 'minicart-promo', section: section %}
+        <div class="minicart__products-list js-minicart-products">
+          {% for product in cart.items %}
+            {% render 'minicart-line-item', product: product %}
+          {% endfor %}
+        </div>
+
+        <div
+          class="minicart__upsell js-minicart-upsell"
+          {% if section.settings.upsell_products.size <= 0 %}
+            hidden
+          {% endif %}
+        >
+          <div class="minicart__upsell-header">
+            {% if section.settings.upsell_title != blank %}
+              <h3 class="minicart__upsell-title">{{ section.settings.upsell_title }}</h3>
+            {% endif %}
+            <div class="minicart__slider-nav">
+              <button type="button" class="minicart__slider-nav-btn js-minicart-upsell-prev" aria-label="Previous Slide">
+                {{ 'icon-chevron-left.svg' | inline_asset_content }}
+              </button>
+              <button type="button" class="minicart__slider-nav-btn js-minicart-upsell-next" aria-label="Next Slide">
+                {{ 'icon-chevron-right.svg' | inline_asset_content }}
+              </button>
+            </div>
+          </div>
+          <div
+            class="swiper minicart__upsell-swiper js-minicart-upsell-swiper"
+          >
+            <div class="swiper-wrapper">
+              {%- liquid
+                assign cart_product_ids = ''
+                for item in cart.items
+                  assign cart_product_ids = cart_product_ids | append: ',' | append: item.product_id | append: ','
+                endfor
+              -%}
+              {%- for product in section.settings.upsell_products -%}
+                {%- assign product_id_match = ',' | append: product.id | append: ',' -%}
+                {%- unless cart_product_ids contains product_id_match -%}
+                  <div class="swiper-slide">
+                    {% render 'minicart-upsell-product', product: product %}
+                  </div>
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+        {% render 'minicart-free-shipping', section: section %}
+        {% render 'minicart-note', section: section %}
+        {% render 'minicart-footer', section: section %}
+      {% else %}
+        {% render 'minicart-empty', section: section %}
+      {% endif %}
+    </div>
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Minicart",
+  "settings": [
+    {
+      "type": "text",
+      "id": "minicart_title",
+      "label": "Minicart title",
+      "default": "Your cart"
+    },
+    {
+      "type": "header",
+      "content": "Empty cart"
+    },
+    {
+      "type": "image_picker",
+      "id": "empty_cart_icon",
+      "label": "Empty cart icon"
+    },
+    {
+      "type": "text",
+      "id": "empty_cart_heading",
+      "label": "Empty cart heading",
+      "default": "Your cart is empty"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_cart_text",
+      "label": "Empty cart text",
+      "default": "Your cart is empty"
+    },
+    {
+      "type": "product_list",
+      "id": "empty_cart_products",
+      "label": "Empty cart products"
+    },
+    {
+      "type": "header",
+      "content": "Promo Message"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "promo_text",
+      "label": "Text",
+      "default": "Hello world! <strong>Test message</strong> with link to <a href='/contact'>contact page</a>"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color_background",
+      "id": "promo_background",
+      "label": "Background",
+      "default": "#F6F6F6"
+    },
+    {
+      "type": "header",
+      "content": "Upsell products"
+    },
+    {
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Upsell products title",
+      "default": "You may also like"
+    },
+    {
+      "type": "product_list",
+      "id": "upsell_products",
+      "label": "Upsell products"
+    },
+    {
+      "type": "header",
+      "content": "Free shipping"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_amount",
+      "label": "Free shipping amount",
+      "default": 100
+    },
+    {
+      "type": "textarea",
+      "id": "free_shipping_message",
+      "label": "Free shipping message",
+      "default": "You are only {amount} away from free shipping",
+      "info": "The pattern {amount} will be replaced with the remaining amount"
+    },
+    {
+      "type": "textarea",
+      "id": "free_shipping_congratulations_message",
+      "label": "Free shipping congratulations message",
+      "default": "Congratulations! You have free shipping"
+    },
+    {
+      "type": "color_background",
+      "id": "free_shipping_progress_background",
+      "label": "Free shipping progress background",
+      "default": "#DCDCDC"
+    },
+    {
+      "type": "color",
+      "id": "free_shipping_progress_bar_fill_color",
+      "label": "Progress bar fill color",
+      "default": "#FFD875"
+    },
+    {
+      "type": "header",
+      "content": "Cart note"
+    },
+    {
+      "type": "checkbox",
+      "id": "note_enabled",
+      "label": "Enable cart note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "add_note_label",
+      "label": "Add a note",
+      "default": "Add a note"
+    },
+    {
+      "type": "text",
+      "id": "edit_note_label",
+      "label": "Edit a note",
+      "default": "Edit a note"
+    },
+    {
+      "type": "header",
+      "content": "Terms and conditions"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "terms_text",
+      "label": "Terms and conditions text",
+      "default": "I agree to the <a href='/pages/terms-and-conditions'>terms and conditions</a>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minicart"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+<div class="minicart__footer">
+  <div class="minicart__subtotal">
+    <span class="minicart__subtotal-label">Subtotal:</span>
+    <span class="minicart__subtotal-price">{{ cart.total_price | money }}</span>
+  </div>
+
+  <p class="minicart__disclaimer">Tax included and shipping calculated at checkout</p>
+
+  {%- if section.settings.terms_text != blank -%}
+    <div class="minicart__terms">
+      <input
+        class="minicart__terms-checkbox js-minicart-terms-checkbox"
+        type="checkbox"
+        id="terms"
+        name="terms"
+      >
+      <label class="minicart__terms-label" for="terms">{{ section.settings.terms_text }}</label>
+    </div>
+  {%- endif -%}
+
+  <a
+    href="/checkout"
+    class="minicart__checkout js-minicart-checkout"
+    {%- if section.settings.terms_text != blank %}
+      disabled
+    {% endif -%}
+  >
+    Checkout
+  </a>
+</div>

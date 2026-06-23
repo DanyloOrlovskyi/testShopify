@@ -8,5 +8,42 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "sections": {
+      "minicart": {
+        "type": "minicart",
+        "settings": {
+          "minicart_title": "Your cart",
+          "empty_cart_icon": "shopify://shop_images/empty-cart.svg",
+          "empty_cart_heading": "Your cart is empty",
+          "empty_cart_text": "Your cart is empty",
+          "empty_cart_products": [
+            "gift-card",
+            "statement-gold-ring-copy-1",
+            "butterfly-hope-and-rebirth"
+          ],
+          "promo_text": "Hello world! <strong>Test message</strong> with link to <a href=\"/contact\">contact page</a>",
+          "promo_icon": "shopify://shop_images/message-question.svg",
+          "promo_text_color": "#000000",
+          "promo_background": "#F6F6F6",
+          "upsell_title": "You may also like",
+          "upsell_products": [
+            "butterfly-hope-and-rebirth",
+            "moon-charm-necklace",
+            "i-am-the-storm"
+          ],
+          "free_shipping_amount": 10000,
+          "free_shipping_message": "You are only {amount} away from free shipping",
+          "free_shipping_congratulations_message": "Congratulations! You have free shipping",
+          "free_shipping_background": "#FFFFFF",
+          "free_shipping_progress_bar_fill_color": "#ffd875",
+          "note_enabled": true,
+          "add_note_label": "Add a note",
+          "edit_note_label": "Edit a note",
+          "terms_text": "I agree to the <a href=\"/pages/terms-and-conditions\">terms and conditions</a>"
+        }
+      }
+    },
+    "content_for_index": []
+  }
 }
