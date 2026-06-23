@@ -303,9 +303,14 @@ body.quick-view-open {
   height: 100%;
   border-radius: 50%;
   background-color: var(--swatch-bg, #BCBBB9);
-  background-image: var(--swatch-bg);
+
   background-size: cover;
   background-position: center;
+}
+
+.quick-view__swatch-visual--swatch-image{
+  background-image: var(--swatch-bg);
+  background-color: unset;
 }
 
 .quick-view__swatch:hover {
@@ -316,16 +321,12 @@ body.quick-view-open {
   border-color: #000000;
 }
 
-.quick-view__swatch[disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.quick-view__swatch[disabled] .quick-view__swatch-visual {
+.quick-view__swatch--disabled .quick-view__swatch-visual {
   position: relative;
+  opacity: 0.5;
 }
 
-.quick-view__swatch[disabled] .quick-view__swatch-visual::after {
+.quick-view__swatch--disabled .quick-view__swatch-visual::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -403,8 +404,7 @@ body.quick-view-open {
 }
 
 .quick-view__pill--disabled {
-  cursor: not-allowed;
-  pointer-events: none;
+  opacity: 0.5;
 }
 
 .quick-view__pill--disabled .quick-view__pill-label {
@@ -525,6 +525,11 @@ body.quick-view-open {
   color: #000000;
   text-decoration: underline;
   text-underline-offset: 4px;
+  transition: text-decoration-color 0.3s ease;
+}
+
+.quick-view__product-link:hover{
+  text-decoration-color: #fff;
 }
 
 .quick-view__product-link svg {
@@ -565,6 +570,10 @@ body.quick-view-open {
   .quick-view__media{
     padding-right: 12px;
     flex: 0 0 auto;
+  }
+
+  .quick-view__slider-thumbs{
+    display: none;
   }
 
   .quick-view__details {
