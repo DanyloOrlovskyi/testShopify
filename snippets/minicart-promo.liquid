@@ -3,7 +3,10 @@
 {%- if section.settings.promo_text != blank -%}
   <div
     class="minicart__promo"
-    style="background: {{ section.settings.promo_background }}; color: {{ section.settings.promo_text_color }};"
+    style="
+      --promo_background:{{ section.settings.promo_background }};
+      --promo_text_color: {{ section.settings.promo_text_color }};
+    "
   >
     {%- if promo_icon != blank -%}
       <img
@@ -15,7 +18,7 @@
         "
         width="24"
         height="24"
-        alt="{{ promo_icon.alt | default: 'Promo' }}"
+        alt="{{ promo_icon.alt | default: 'Promo icon' }}"
         loading="lazy"
       >
     {%- endif -%}

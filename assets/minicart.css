@@ -307,6 +307,8 @@ body.minicart-open{
     padding: 16px 24px;
     font-size: 14px;
     line-height: 1.18;
+    background: var(--promo_background);
+    color: var(--promo_text_color);
 }
 .minicart__promo-icon{
     margin-right: 4px;
@@ -343,34 +345,34 @@ body.minicart-open{
     min-height: 58px;
 }
 
-.minicart__free-shipping__progress-bar{
+.minicart__free-shipping-progress-bar{
     height: 5px;
     border-radius: 40px;
     background-color: #DCDCDC;
     overflow: hidden;
 }
 
-.minicart__free-shipping__progress-bar__fill{
+.minicart__free-shipping-progress-bar-fill{
     height: 100%;
     border-radius: inherit;
     transition: width 0.3s ease;
 }
 
-.minicart__free-shipping__message{
+.minicart__free-shipping-message{
     font-size: 14px;
     line-height: 1.3;
     color: #535353;
     text-align: center;
 }
 
-.minicart__free-shipping__congratulations{
+.minicart__free-shipping-congratulations{
     font-weight: 500;
     color: #000000;
     padding-left: 23px;
     position: relative;
 }
 
-.minicart__free-shipping__congratulations::before{
+.minicart__free-shipping-congratulations::before{
     content: '';
     display: block;
     position: absolute;
@@ -382,7 +384,7 @@ body.minicart-open{
     height: 16px;
 }
 
-.minicart__free-shipping__message .minicart__free-shipping__money{
+.minicart__free-shipping-message .minicart__free-shipping-money{
     color: #000000;
     font-weight: 500;
 }
@@ -536,6 +538,10 @@ body.minicart-open{
     line-height: 1.3;
     letter-spacing: 0%;
     white-space: nowrap;
+}
+
+.minicart__upsell-product-add[disabled]{
+    color: #000;
 }
 
 .minicart__upsell-product-add:hover{
