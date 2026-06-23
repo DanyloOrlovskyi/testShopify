@@ -12,9 +12,10 @@
     --button-background-color: {{ block.settings.button_background_color }};
     --text-alignment: {{ block.settings.text_alignment }};
     --text-alignment-mobile: {{ block.settings.text_alignment_mobile }};
+    --overlay-background:{{ block.settings.overlay_color }};
   "
 >
-  <div class="slideshow-swiper__slide-overlay" style="background-color: {{ block.settings.overlay_color }}"></div>
+  <div class="slideshow-swiper__slide-overlay"></div>
   <picture
     class="js-media-element"
     data-aspect-ratio="{{ desktop_aspect_ratio }}"

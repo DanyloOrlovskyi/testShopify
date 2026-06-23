@@ -78,6 +78,7 @@ slideshow-component[hidden]{
     position: absolute;
     inset: 0;
     z-index: 1;
+    background-color: var(--overlay-background);
 }
 
 .slideshow-swiper__slide{
