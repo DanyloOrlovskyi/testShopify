@@ -51,7 +51,7 @@
           type="number"
           name="quantity"
           min="0"
-          max="{{ product.variant.inventory_quantity }}"
+          max="{{ product.variant.inventory_quantity | default: 999 }}"
           class="minicart__product-qty-input js-minicart-product-qty-input"
           value="{{ product.quantity }}"
           aria-label="Quantity"

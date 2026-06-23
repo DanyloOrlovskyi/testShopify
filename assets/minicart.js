@@ -39,7 +39,6 @@ class CartDrawer extends HTMLElement {
       termsCheckbox: '.js-minicart-terms-checkbox',
       checkout: '.js-minicart-checkout',
       upsell: '.js-minicart-upsell',
-      upsellWrapper: '.js-minicart-upsell-wrapper',
       upsellSwiper: '.js-minicart-upsell-swiper',
       upsellPrev: '.js-minicart-upsell-prev',
       upsellNext: '.js-minicart-upsell-next',
@@ -50,7 +49,7 @@ class CartDrawer extends HTMLElement {
       emptyCartAddToCartButton: '.js-product-card-addToCart',
       emptyCartProductCard: '.js-product-card',
       emptyCartProductCardPicture: '.js-product-card-picture',
-      swatch: '.js-product-card-swatch',
+      productCardSwatch: '.js-product-card-swatch',
     };
 
     this.upsellSlider = null;
@@ -134,7 +133,7 @@ class CartDrawer extends HTMLElement {
       return;
     }
 
-    const swatch = target.closest(this.selectors.swatch);
+    const swatch = target.closest(this.selectors.productCardSwatch);
     if (swatch) {
       event.preventDefault();
       this.selectSwatch(swatch);
@@ -164,7 +163,6 @@ class CartDrawer extends HTMLElement {
 
     if (target.matches(this.selectors.note)) {
       this.changeCartNote(target.value);
-      return;
     }
   }
 
@@ -209,6 +207,9 @@ class CartDrawer extends HTMLElement {
     })
     .then((data) => this.renderMinicart(data.sections.minicart))
     .catch((error) => {
+      const itemQtyInput = line.querySelector(this.selectors.qtyInput);
+      itemQtyInput.value = itemQtyInput.max;
+      
       line.querySelector(this.selectors.productError).innerHTML = error.message;
     }).finally(() => line.removeAttribute('disabled'));
   }
@@ -234,7 +235,6 @@ class CartDrawer extends HTMLElement {
 
   addToCart(variantId, button) {  
     if (!variantId) return;
-    console.log('button', button)
     button?.setAttribute('disabled', '');
     const formData = {
       items: [{ id: variantId, quantity: 1 }],
@@ -271,7 +271,7 @@ class CartDrawer extends HTMLElement {
     card.querySelectorAll(this.selectors.emptyCartProductCardPicture).forEach((picture) => {
       picture.classList.toggle('product-card__picture--active', picture.dataset.imageId === imageId);
     });
-    card.querySelectorAll(this.selectors.swatch).forEach((button) => {
+    card.querySelectorAll(this.selectors.productCardSwatch).forEach((button) => {
       button.classList.toggle('product-card__swatch--active', button === swatch);
     });
     if (variantId) {
@@ -282,8 +282,8 @@ class CartDrawer extends HTMLElement {
 
   renderMinicart(html) {
     if (!html) return;
+
     const fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('cart-drawer');
-    if (!fresh) return;
 
     this.innerHTML = fresh.innerHTML;
     this.setCartCounter(fresh.dataset.itemCount);

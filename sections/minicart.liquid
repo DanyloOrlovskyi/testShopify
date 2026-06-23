@@ -11,7 +11,7 @@
         {{ section.settings.minicart_title }}
         <span class="minicart__quantity js-minicart-quantity"> ({{ item_count }}) </span>
       </span>
-      <button type="button" class="minicart__close-button js-minicart-close" aria-label="Close cart">
+      <button type="button" class="minicart__close-button js-minicart-close" aria-label="Close minicart">
         {{ 'icon-cross.svg' | inline_asset_content }}
       </button>
     </div>
@@ -47,7 +47,7 @@
           <div
             class="swiper minicart__upsell-swiper js-minicart-upsell-swiper"
           >
-            <div class="swiper-wrapper js-minicart-upsell-wrapper">
+            <div class="swiper-wrapper">
               {%- liquid
                 assign cart_product_ids = ''
                 for item in cart.items
