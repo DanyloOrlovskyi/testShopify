@@ -48,5 +48,10 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "quick_view": {
+    "add_to_cart": "Add to cart",
+    "sold_out": "Sold out",
+    "visit_product_page": "Visit Product Page"
   }
 }

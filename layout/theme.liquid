@@ -22,6 +22,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
+    {{ 'toast.css' | asset_url | stylesheet_tag }}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
@@ -36,5 +38,6 @@
     {% sections 'footer-group' %}
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{{ 'toast.js' | asset_url }}"></script>
   </body>
 </html>
