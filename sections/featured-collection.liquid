@@ -1,0 +1,114 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign hero_image = section.settings.hero_image | default: collection.image
+-%}
+
+{{ 'featured-collection.css' | asset_url | stylesheet_tag }}
+
+{%- if collection != blank -%}
+  <featured-collection class="featured-collection" id="featured-collection-{{ section.id }}" hidden>
+    <div class="featured-collection__inner-wrapper">
+      <a class="featured-collection__banner" href="{{ collection.url }}">
+        {%- if hero_image != blank -%}
+          <picture>
+            <source
+              media="(max-width: 420px)"
+              srcset="
+                {{ hero_image | image_url: width: 388 }} 1x,
+                {{ hero_image | image_url: width: 776 }} 2x
+              "
+            >
+            <source
+              media="(max-width: 768px)"
+              srcset="
+                {{ hero_image | image_url: width: 735 }} 1x,
+                {{ hero_image | image_url: width: 1470 }} 2x
+              "
+            >
+            <source
+              media="(max-width: 1080px)"
+              srcset="
+                {{ hero_image | image_url: width: 260 }} 1x,
+                {{ hero_image | image_url: width: 520 }} 2x
+              "
+            >
+            <img
+              class="featured-collection__banner-image"
+              src="{{ hero_image | image_url: width: 400 }}"
+              srcset="
+                {{ hero_image | image_url: width: 400 }} 1x,
+                {{ hero_image | image_url: width: 800 }} 2x
+              "
+              alt="{{ hero_image.alt }}"
+              loading="lazy"
+            >
+          </picture>
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag }}
+        {%- endif -%}
+        <div class="featured-collection__banner-content">
+          <p class="featured-collection__banner-title">{{ collection.title }}</p>
+          <p class="featured-collection__banner-count">{{ collection.products_count }} products</p>
+        </div>
+      </a>
+      <div class="featured-collection__slider-wrapper">
+        <button
+          class="featured-collection__nav featured-collection__nav--prev js-fectured-collection-nav-prev"
+          type="button"
+          aria-label="Previous slide"
+        >
+          {{ 'arrow-left.svg' | inline_asset_content }}
+        </button>
+
+        <button
+          class="featured-collection__nav featured-collection__nav--next js-fectured-collection-nav-next"
+          type="button"
+          aria-label="Next slide"
+        >
+          {{ 'arrow-right.svg' | inline_asset_content }}
+        </button>
+
+        <div class="swiper featured-collection__swiper js-featured-collection-swiper">
+          <div class="swiper-wrapper">
+            {%- for product in collection.products limit: 16 -%}
+              <div class="swiper-slide">
+                {%- render 'product-card', product: product -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="featured-collection__pagination js-featured-collection-pagination"></div>
+      </div>
+    </div>
+  </featured-collection>
+{%- endif -%}
+
+<script src="{{ 'featured-collection.js' | asset_url }}" defer></script>
+<script src="{{ 'quick-view.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "tag": "section",
+  "class": "featured-collection-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.featured_collection.settings.collection.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "t:sections.featured_collection.settings.hero_image.label",
+      "info": "t:sections.featured_collection.settings.hero_image.info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection.presets.default.name"
+    }
+  ]
+}
+{% endschema %}

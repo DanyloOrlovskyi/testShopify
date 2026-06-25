@@ -1,0 +1,153 @@
+{%- assign available_variant = product.selected_or_first_available_variant -%}
+
+<div class="product-card">
+  <a
+    class="product-card__image-link"
+    href="{{ product.url }}"
+    aria-label="{{ product.title }}"
+    style="--ratio-percent: 100%;"
+  >
+    {%- if product.featured_image == blank -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+    {%- else -%}
+      {%- assign is_first_image = true -%}
+
+      {%- for variant in product.variants -%}
+        {% liquid
+          assign variant_img = variant.featured_image | default: product.featured_image
+          assign img_class = 'product-card__image js-product-card-image'
+          if is_first_image
+            assign img_class = img_class | append: ' product-card__image--active'
+          endif
+        %}
+
+        <picture>
+          <source
+            media="(max-width: 420px)"
+            srcset="
+              {{ variant_img | image_url: width: 186 }} 1x,
+              {{ variant_img | image_url: width: 372 }} 2x
+            "
+          >
+          <source
+            media="(max-width: 768px)"
+            srcset="
+              {{ variant_img | image_url: width: 360 }} 1x,
+              {{ variant_img | image_url: width: 720 }} 2x
+            "
+          >
+          <source
+            media="(max-width: 1080px)"
+            srcset="
+              {{ variant_img | image_url: width: 247 }} 1x,
+              {{ variant_img | image_url: width: 494 }} 2x
+            "
+          >
+          <img
+            class="{{ img_class }}"
+            data-image-id="{{ variant_img.id }}"
+            src="{{ variant_img | image_url: width: 350 }}"
+            srcset="
+              {{ variant_img | image_url: width: 350 }} 1x,
+              {{ variant_img | image_url: width: 700 }} 2x
+            "
+            alt="{{ variant_img.alt }}"
+            loading="lazy"
+          >
+        </picture>
+
+        {%- assign is_first_image = false -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    <ul class="product-card__tags">
+      {%- for tag in product.tags limit: 3 -%}
+        {%- assign tag_lower = tag | downcase -%}
+        <li
+          class="
+            product-card__tag
+            {% if tag_lower == 'sale' %}product-card__tag--sale{% endif %}
+          "
+        >
+          {{ tag }}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if available_variant != blank -%}
+      <quick-view-opener data-product-handle="{{ product.handle }}">
+        <button
+          class="product-card__addToCart js-quick-view-button"
+          type="button"
+          data-variant-id="{{ available_variant.id }}"
+          aria-label="Add {{ product.title | escape }} to cart"
+        >
+          <img
+            class="product-card__addToCart-icon"
+            src="{{ 'icon-cart.svg' | asset_url }}"
+            alt=""
+            width="20"
+            height="20"
+            aria-hidden="true"
+          >
+        </button>
+      </quick-view-opener>
+    {%- endif -%}
+  </a>
+
+  <div class="product-card__info">
+    {%- comment -%}
+      swatch_value priority: swatch.image → swatch.color.rgb → name-to-hex fallback.
+      Passed as CSS variable --swatch-bg on the button element.
+      Image for JS swap: first variant whose option at this position matches the value name.
+    {%- endcomment -%}
+    {%- for option in product.options_with_values -%}
+      {%- if option.name == 'Color' -%}
+        {%- assign color_option_position = option.position | minus: 1 -%}
+        <div class="product-card__swatches" role="list" aria-label="Colors">
+          {%- for option_value in option.values -%}
+            {%- liquid
+              assign matching_variant = null
+              for variant in product.variants
+                if matching_variant == null and variant.options[color_option_position] == option_value.name
+                  assign matching_variant = variant
+                endif
+              endfor
+              assign swatch_img = matching_variant.featured_image | default: product.featured_image
+              if option_value.swatch.image
+                assign swatch_image_url = option_value.swatch.image | image_url: width: 24
+                assign swatch_value = 'url(' | append: swatch_image_url | append: ')'
+              elsif option_value.swatch.color
+                assign swatch_value = option_value.swatch.color
+              else
+                assign swatch_value = '#BCBBB9'
+              endif
+            -%}
+            <button
+              class="product-card__swatch{% if forloop.first %} product-card__swatch--active{% endif %}"
+              type="button"
+              role="listitem"
+              data-swatch-btn
+              data-image-id="{{ swatch_img.id }}"
+              data-variant-id="{{ matching_variant.id }}"
+              title="{{ option_value.name | escape }}"
+              aria-label="{{ option_value.name | escape }}"
+              style="--swatch-bg: {{ swatch_value }};"
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    <a class="product-card__title" href="{{ product.url }}">{{ product.title | escape }}</a>
+
+    <div class="product-card__price">
+      {%- if product.compare_at_price > product.price -%}
+        <span class="product-card__price-sale">{{ product.price | money }}</span>
+        <s class="product-card__price-compare">{{ product.compare_at_price | money }}</s>
+      {%- else -%}
+        <span class="product-card__price-regular">{{ product.price | money }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

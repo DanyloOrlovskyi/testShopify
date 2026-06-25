@@ -1,0 +1,30 @@
+custom-toast{
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: #fff;
+    border: 1px solid #DCDCDC;
+    border-radius: 16px;
+    color: #000;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 16px;
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    max-width: 600px;
+    margin: 0 16px;
+    text-align: center;
+}
+
+custom-toast.toast-open{
+    visibility: visible;
+    opacity: 1;
+}
+
+custom-toast.toast--error{
+    border-color: red;
+    color: red;
+}

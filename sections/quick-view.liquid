@@ -1,0 +1,311 @@
+{{ 'quick-view.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<quick-view-modal
+  class="quick-view"
+  data-variant-id="{{ current_variant.id }}"
+  data-product-handle="{{ product.handle }}"
+>
+  <div class="quick-view__overlay js-quick-view-close"></div>
+  <div
+    class="quick-view__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Quick view {{ product.title }}"
+  >
+    <div class="quick-view__close-wrapper">
+      <button class="quick-view__close js-quick-view-close" type="button" aria-label="Close quick-view">
+        {{ 'icon-cross.svg' | inline_asset_content }}
+      </button>
+    </div>
+    <div class="quick-view__content-wrapper">
+      <div class="quick-view__media">
+        {%- if product.media.size > 0 -%}
+          <div class="quick-view__slider">
+            <button
+              class="quick-view__nav quick-view__nav-prev js-media-nav-prev"
+              type="button"
+              aria-label="Previous slide"
+            >
+              {{ 'icon-arrow-left.svg' | inline_asset_content }}
+            </button>
+            <button
+              class="quick-view__nav quick-view__nav-next js-media-nav-next"
+              type="button"
+              aria-label="Next slide"
+            >
+              {{ 'icon-arrow-right.svg' | inline_asset_content }}
+            </button>
+            <div class="quick-view__slider-wrapper js-quick-view-slider-wrapper">
+              <div class="swiper-wrapper">
+                {%- for media in product.media -%}
+                  <div class="swiper-slide" data-media-id="{{ media.id }}">
+                    <div class="quick-view__frame">
+                      {%- case media.media_type -%}
+                        {%- when 'image' -%}
+                          <picture>
+                            <source
+                              media="(max-width: 420px)"
+                              srcset="
+                                {{ media | image_url: width: 372 }} 1x,
+                                {{ media | image_url: width: 744 }} 2x
+                              "
+                            >
+                            <source
+                              media="(max-width: 768px)"
+                              srcset="
+                                {{ media | image_url: width: 720 }} 1x,
+                                {{ media | image_url: width: 1440 }} 2x
+                              "
+                            >
+                            <img
+                              class="quick-view__frame-media"
+                              src="{{ media | image_url: width: 455 }}"
+                              srcset="
+                                {{ media | image_url: width: 455 }} 1x,
+                                {{ media | image_url: width: 910 }} 2x
+                              "
+                              alt="{{ media.alt }}"
+                              loading="lazy"
+                            >
+                          </picture>
+                        {%- when 'video' -%}
+                          {{
+                            media
+                            | video_tag:
+                              class: 'quick-view__frame-media',
+                              image_size: '455px',
+                              controls: true,
+                              autoplay: false,
+                              loop: false,
+                              muted: false,
+                              preload: 'none',
+                              loading: 'lazy'
+                          }}
+                        {%- when 'external_video' -%}
+                          {{
+                            media
+                            | external_video_tag: class: 'quick-view__frame-media', width: 455, loading: 'lazy'
+                          }}
+                      {%- endcase -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+              <div class="quick-view__pagination js-media-pagination"></div>
+            </div>
+            <div class="quick-view__slider-thumbs js-quick-view-slider-thumbs">
+              <div class="swiper-wrapper">
+                {%- for media in product.media -%}
+                  <div class="swiper-slide">
+                    <div class="quick-view__thumb">
+                      <picture>
+                        <source
+                          media="(max-width: 768px)"
+                          srcset="
+                            {{ media.preview_image | image_url: width: 48, height: 48 }} 1x,
+                            {{ media.preview_image | image_url: width: 96, height: 96 }} 2x
+                          "
+                        >
+                        <img
+                          class="quick-view__thumb-img"
+                          src="{{ media.preview_image | image_url: width: 67, height: 67 }}"
+                          srcset="
+                            {{ media.preview_image | image_url: width: 67, height: 67 }} 1x,
+                            {{ media.preview_image | image_url: width: 134, height: 134 }} 2x
+                          "
+                          alt="{{ media.alt }}"
+                          loading="lazy"
+                        >
+                      </picture>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {%- else -%}
+          <div class="quick-view__frame quick-view__frame-placeholder">
+            {{ 'product-apparel-1' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="quick-view__details">
+        <h2 class="quick-view__title">{{ product.title }}</h2>
+
+        <div class="quick-view__price js-quick-view-price">
+          {%- if current_variant.compare_at_price > current_variant.price %}
+            <span class="quick-view__price-sale">{{ current_variant.price | money }}</span>
+            <s class="quick-view__price-compare">{{ current_variant.compare_at_price | money }}</s>
+          {%- else -%}
+            <span class="quick-view__price-regular">{{ current_variant.price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- form 'product', product, class: 'quick-view__form js-quick-view-product-form' -%}
+          <input class="js-form-variant-id-input" type="hidden" name="id" value="{{ current_variant.id }}">
+
+          {%- unless product.has_only_default_variant -%}
+            <div class="quick-view__options-wrapper js-quick-view-options-wrapper">
+              {%- for option in product.options_with_values -%}
+                {%- liquid
+                  assign is_color = false
+                  if option.name == 'Color'
+                    assign is_color = true
+                  endif
+                  for value in option.values
+                    if value.swatch
+                      assign is_color = true
+                      break
+                    endif
+                  endfor
+                -%}
+
+                <div class="quick-view__option js-option">
+                  <div class="quick-view__option-head">
+                    <span class="quick-view__option-name">{{ option.name }}:</span>
+                    {%- if is_color -%}
+                      <span class="quick-view__option-selected">{{ option.selected_value.name }}</span>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if is_color -%}
+                    <div class="quick-view__swatches">
+                      {%- for value in option.values -%}
+                        {%- liquid
+                          if value.swatch.image
+                            assign swatch_url = value.swatch.image | image_url: width: 60, height: 60
+                            assign swatch_image = 'url(' | append: swatch_url | append: ')'
+                          else
+                            assign swatch_color = value.swatch.color
+                          endif
+
+                          assign option_id = option.name | prepend: 'quick-view-' | append: '-' | append: value.name | escape
+                        -%}
+                        <label
+                          class="quick-view__swatch {% unless value.available %} quick-view__swatch--disabled{% endunless %}"
+                          title="{{ value.name }}"
+                          for="{{ option_id }}"
+                        >
+                          <input
+                            type="radio"
+                            id="{{ option_id }}"
+                            class="quick-view__swatch-input js-quick-view-option-input"
+                            data-option-id="{{ value.id }}_{{ option.position }}"
+                            name="option{{ option.position }}"
+                            value="{{ value.name }}"
+                            {% if value.selected %}
+                              checked
+                            {% endif %}
+                          >
+                          <span
+                            class="quick-view__swatch-visual"
+                            style="
+                              --swatch-color: {{ swatch_color }};
+                              --swatch-image: {{ swatch_image }};
+                            "
+                          ></span>
+                          <span class="quick-view__swatch-tooltip">{{ value.name }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  {%- else -%}
+                    <div class="quick-view__pills">
+                      {%- for value in option.values -%}
+                        {%- liquid
+                          assign option_id = option.name | prepend: 'quick-view-' | append: '-' | append: value.name | escape
+                        -%}
+                        <label
+                          class="quick-view__pill{% unless value.available %} quick-view__pill--disabled{% endunless %}"
+                          for="{{ option_id }}"
+                        >
+                          <input
+                            type="radio"
+                            id="{{ option_id }}"
+                            class="quick-view__pill-input js-quick-view-option-input"
+                            data-option-id="{{ value.id }}_{{ option.position }}"
+                            name="option{{ option.position }}"
+                            value="{{ value.name }}"
+                            {% if value.selected %}
+                              checked
+                            {% endif %}
+                          >
+                          <span class="quick-view__pill-label">{{ value.name }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endunless -%}
+          <div class="quick-view__quantity">
+            <button
+              class="quick-view__qty-btn js-qty-minus"
+              type="button"
+              aria-label="Decrease quantity"
+              disabled
+            >
+              {{ 'icon-minus.svg' | inline_asset_content }}
+            </button>
+            <input
+              class="quick-view__qty-input js-quick-view-qty-input"
+              type="number"
+              name="quantity"
+              value="1"
+              min="1"
+              max="{{ current_variant.quantity_rule.max | default: 9999 }}"
+              aria-label="Quantity field"
+            >
+            <button
+              class="quick-view__qty-btn js-qty-plus"
+              type="button"
+              aria-label="Increase quantity"
+            >
+              {{ 'icon-plus.svg' | inline_asset_content }}
+            </button>
+          </div>
+
+          <div class="quick-view__actions">
+            <button
+              class="quick-view__add-to-cart-button js-add-to-cart-button"
+              data-text-sold-out="{{ 'quick_view.sold_out' | t }}"
+              data-text-add-to-cart="{{ 'quick_view.add_to_cart' | t }}"
+              {% unless current_variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {% if current_variant.available %}
+                {{ 'quick_view.add_to_cart' | t }}
+              {% else %}
+                {{ 'quick_view.sold_out' | t }}
+              {% endif %}
+            </button>
+            {% if current_variant.available %}
+              {{ form | payment_button }}
+            {% endif %}
+          </div>
+
+          <a class="quick-view__product-link" href="{{ product.url }}">
+            {{ 'quick_view.visit_product_page' | t }}
+            {{ 'icon-arrow-right.svg' | inline_asset_content }}
+          </a>
+
+          <script type="application/json" data-selected-variant>
+            {{ current_variant | json }}
+          </script>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</quick-view-modal>
+
+{% schema %}
+{
+  "name": "Quick view",
+  "settings": []
+}
+{% endschema %}
