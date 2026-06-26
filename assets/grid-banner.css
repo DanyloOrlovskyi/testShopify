@@ -1,0 +1,191 @@
+.section-grid-banner{
+    margin: 12px;
+}
+.grid-banner{
+    border-radius: 16px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    max-width: 1680px;
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto; 
+}
+
+.grid-banner:hover .grid-banner__block .grid-banner__block-image{
+    filter: blur(1px);
+}
+
+.grid-banner:hover .grid-banner__block:hover .grid-banner__block-image{
+    filter: blur(0);
+}
+
+.grid-banner__block{
+    flex: 1;
+    position: relative;
+    transition: flex 0.4s ease;
+    height: 720px;
+    will-change: transform;
+}
+
+.grid-banner__block:hover{
+    flex: 1.2;
+}
+
+.grid-banner__block-image-wrapper::before{
+    content: '';
+    padding-bottom: 87%;
+}
+
+.grid-banner__block-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.grid-banner__block-image--mobile{
+    display: none;
+}
+
+.grid-banner__block-content{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 90px;
+    color: var(--text-color);
+    background: var(--content-overlay);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    will-change: transform;
+}
+
+.grid-banner__block-content::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 100%);
+    z-index: 2;
+}
+
+.grid-banner__block:hover .grid-banner__block-content{
+    transform: translateY(0);
+}
+
+.grid-banner__block-content__heading{
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+    z-index: 3;
+}
+
+.grid-banner__block-content__description{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+    z-index: 3;
+}
+
+.grid-banner__block-content__button-wrapper{
+    display: inline-block;
+    padding: 4px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 12px 40px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 3;
+}
+
+.grid-banner__block-content__button{
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.12;
+    text-align: center;
+    padding: 16px 20px;
+    border-radius: 12px;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    text-decoration: none;
+    transition-property: background-color, color;
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+    z-index: 3;
+}
+
+.grid-banner__block-content__button:hover{
+    color: var(--button-text-color-hover);
+    background-color: var(--button-background-color-hover);
+}
+
+@media (max-width: 1080px) {
+    .grid-banner{
+        display: grid;
+        gap: 5px;
+        border-radius: 0;
+    }
+    .grid-banner__block{
+        border-radius: 12px;
+        overflow: hidden;
+        min-height: 520px;
+        height: 100%;
+    }
+    .grid-banner__block-content{
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-banner__block-image--desktop {
+        display: none;
+    }
+    .grid-banner__block-image--mobile {
+        display: block;
+    }
+    .section-grid-banner{
+        margin: 12px 4px;
+    }
+    .grid-banner__block-image-wrapper::before{
+        padding-bottom: 103.5%;
+    }
+
+    .grid-banner__block{
+        min-height: 380px;
+    }
+
+    .grid-banner__block-content{
+        padding: 24px 16px 16px;
+    }
+    .grid-banner__block-content__heading{
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+    .grid-banner__block-content__description{
+        margin-bottom: 12px;
+    }
+    .grid-banner__block-content__button{
+        padding: 12px 20px;
+    }
+    .grid-banner:hover .grid-banner__block .grid-banner__block-image{
+        filter: unset;
+    }
+}
+

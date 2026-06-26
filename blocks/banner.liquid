@@ -1,0 +1,154 @@
+{% if block.settings.image_desktop != blank or block.settings.image_mobile != blank %}
+  <div class="grid-banner__block-image-wrapper">
+    <picture>
+      <img
+        class="grid-banner__block-image grid-banner__block-image--desktop"
+        src="{{ block.settings.image_desktop | image_url }}"
+        srcset="
+          {{ block.settings.image_desktop | image_url: width: 1680 }} 1x,
+          {{ block.settings.image_desktop | image_url: width: 3360 }} 2x,
+        "
+        alt="{{ block.settings.heading }}"
+        loading="lazy"
+      >
+    <img
+      class="grid-banner__block-image grid-banner__block-image--mobile"
+      src="{{ block.settings.image_mobile | image_url }}"
+      srcset="
+        {{ block.settings.image_mobile | image_url: width: 768 }} 1x,
+        {{ block.settings.image_mobile | image_url: width: 1536 }} 2x,
+      "
+      alt="{{ block.settings.heading }}"
+      loading="lazy"
+    >
+  </div>
+{% endif %}
+<div
+  class="grid-banner__block-content"
+  style="
+    --image-overlay: {{ block.settings.image_overlay }};
+    --content-overlay: {{ block.settings.content_overlay }};
+    --text-color: {{ block.settings.text_color }};
+    --button-text-color: {{ block.settings.button_text_color }};
+    --button-background-color: {{ block.settings.button_background_color }};
+    --button-text-color-hover: {{ block.settings.button_text_color_hover }};
+    --button-background-color-hover: {{ block.settings.button_background_color_hover }};
+  "
+>
+  {% if block.settings.heading != blank %}
+    <h2 class="grid-banner__block-content__heading">
+      {{ block.settings.heading }}
+    </h2>
+  {% endif %}
+  {% if block.settings.text != blank %}
+    <div class="grid-banner__block-content__description">
+      {{ block.settings.text }}
+    </div>
+  {% endif %}
+  {% if block.settings.button_link != blank %}
+    <div class="grid-banner__block-content__button-wrapper">
+      <a href="{{ block.settings.button_link }}" class="grid-banner__block-content__button">
+        {{ block.settings.button_label }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Banner",
+  "class": "grid-banner__block",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image mobile"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover Skiwear"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>This highly durable shell jacket has all the necessary features for a full-blown off-piste adventure.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Women's skiwear"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_aria_label",
+      "label": "Button aria label",
+      "default": "Shop Women's skiwear"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "image_overlay",
+      "label": "Image overlay",
+      "default": "rgba(0, 0, 0, 0.04)"
+    },
+    {
+      "type": "color_background",
+      "id": "content_overlay",
+      "label": "Content overlay",
+      "default": "linear-gradient(180deg, rgba(35, 35, 35, 0) 0%, rgba(35, 35, 35, 0.6) 100%)"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color",
+      "label": "Button background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color_hover",
+      "label": "Button text hover",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_background_color_hover",
+      "label": "Button background hover",
+      "default": "rgba(255, 255, 255, 0.5)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,32 @@
+{{ 'grid-banner.css' | asset_url | stylesheet_tag }}
+
+<div class="grid-banner">
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Grid banner",
+  "class": "section-grid-banner",
+  "blocks": [
+    {
+      "type": "banner"
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Grid banner",
+      "blocks": {
+        "banner_1": {
+          "type": "banner"
+        },
+        "banner_2": {
+          "type": "banner"
+        }
+      },
+      "block_order": ["banner_1", "banner_2"]
+    }
+  ]
+}
+{% endschema %}
