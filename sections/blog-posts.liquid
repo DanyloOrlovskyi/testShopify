@@ -1,0 +1,153 @@
+{{ 'blog-posts.css' | asset_url | stylesheet_tag }}
+
+<blog-posts-section class="blog-posts-section{% if section.settings.mobile_layout == 'carousel' %} blog-posts-section__mobile-type--carousel{% endif %}">
+  <div class="blog-posts-section__inner-wrapper">
+    {% if section.settings.heading != blank %}
+      <h2 class="blog-posts-section__title">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <div class="blog-posts-section__content-wrapper">
+      {% if section.settings.blog != blank %}
+        {% for article in section.settings.blog.articles limit: 3 %}
+          <div class="blog-posts-section__post-card">
+            <a
+              class="blog-posts-section__post-card-image-wrapper js-blog-posts-section-post-card-image-wrapper"
+              href="{{ article.url }}"
+              aria-label="{{ article.title }}"
+            >
+              <div class="blog-posts-section__post-card-tags">
+                {% for tag in article.tags limit: 3 %}
+                  <span class="blog-posts-section__post-card-tag">{{ tag }}</span>
+                {% endfor %}
+              </div>
+              {% if article.image %}
+                <picture>
+                  <source
+                    media="(max-width: 420px)"
+                    srcset="
+                      {{ article.image | image_url: width: 367 }} 1x,
+                      {{ article.image | image_url: width: 734 }} 2x
+                    "
+                  >
+                  <source
+                    media="(max-width: 991px)"
+                    srcset="
+                      {{ article.image | image_url: width: 957 }} 1x,
+                      {{ article.image | image_url: width: 1914 }} 2x
+                    "
+                  >
+                  <img
+                    class="blog-posts-section__post-card-image"
+                    src="{{ article.image | image_url: width: 536 }}"
+                    srcset="
+                      {{ article.image | image_url: width: 536 }} 1x,
+                      {{ article.image | image_url: width: 1072 }} 2x
+                    "
+                    loading="lazy"
+                    alt="{{ article.title }}"
+                  >
+                </picture>
+              {% else %}
+                {{ 'blog-apparel-1' | placeholder_svg_tag }}
+              {% endif %}
+            </a>
+            <div class="blog-posts-section__post-card-content">
+              <div class="blog-posts-section__post-card-info">
+                <span class="blog-posts-section__post-card-info-item blog-posts-section__post-card-author">
+                  {{ article.author }}
+                </span>
+                <div class="blog-posts-section__post-card-info-item blog-posts-section__post-card-date">
+                  {{ 'icon-timer.svg' | inline_asset_content }}
+                  <time>{{ article.published_at | date: '%a %d %b' }}</time>
+                </div>
+              </div>
+              <a href="{{ article.url }}" class="blog-posts-section__post-card-content-title">
+                {{ article.title }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..3) %}
+          <div class="blog-posts-section__post-card">
+            <div class="blog-posts-section__post-card-image-wrapper js-blog-posts-section-post-card-image-wrapper">
+              {{ 'blog-apparel-1' | placeholder_svg_tag }}
+            </div>
+            <div class="blog-posts-section__post-card-content">
+              <div class="blog-posts-section__post-card-info">
+                <span class="blog-posts-section__post-card-info-item blog-posts-section__post-card-author">
+                  {{ 'blog_post_section.default_author' | t }}
+                </span>
+                <div class="blog-posts-section__post-card-info-item blog-posts-section__post-card-date">
+                  {{ 'icon-timer.svg' | inline_asset_content }}
+                  <time>{{ 'blog_post_section.default_date' | t }}</time>
+                </div>
+              </div>
+              <a href="#" class="blog-posts-section__post-card-content-title">
+                {{ 'blog_post_section.default_title' | t }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% if section.settings.blog != blank %}
+      <div class="blog-posts-section__footer">
+        <a href="/blogs/{{ section.settings.blog }}" class="blog-posts-section__footer-button">
+          {{- section.settings.button_label -}}
+          {{ 'icon-arrow-right.svg' | inline_asset_content }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  <div class="blog-posts-section__custom-cursor js-blog-posts-section-custom-cursor">
+    <div class="blog-posts-section__custom-cursor-wrapper">
+      {{ 'icon-cursor.svg' | inline_asset_content }}
+    </div>
+  </div>
+</blog-posts-section>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Latest Journal"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Read all news"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Posts"
+    }
+  ]
+}
+{% endschema %}
