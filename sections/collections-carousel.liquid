@@ -1,0 +1,147 @@
+<collections-carousel hidden style="
+    --button-text-color: {{ section.settings.button_text_color }};
+    --button-background-color: {{ section.settings.button_background_color }}; 
+    --button-border-color: {{ section.settings.button_border_color }};
+    --button-text-hover-color: {{ section.settings.button_text_hover_color }};
+    --button-background-hover-color: {{ section.settings.button_background_hover_color }};
+    --button-border-hover-color: {{ section.settings.button_border_hover_color }};
+    --heading-color: {{ section.settings.heading_color }};
+  ">
+  <div class="collections-carousel__inner-wrapper">
+    <div class="collections-carousel__background-image-wrapper">
+      <picture>
+        <img class="collections-carousel__background-image js-collections-carousel-background-image">
+      </picture>
+    </div>
+    <div class="collections-carousel__heading-wrapper">
+      <h2 class="collections-carousel__heading">{{ section.settings.heading }}</h2>
+      <div class="collections-carousel__carousel-controls-wrapper">
+        <button class="collections-carousel__carousel-controls-button js-collections-carousel-button-prev" aria-label="Previous Slide">
+          {{ 'icon-arrow-left.svg' | inline_asset_content }}
+        </button>
+        <button class="collections-carousel__carousel-controls-button js-collections-carousel-button-next" aria-label="Next Slide">
+          {{ 'icon-arrow-right.svg' | inline_asset_content }}
+        </button>
+      </div>
+    </div>
+    <div class="swiper collections-carousel__wrapper js-collections-carousel-wrapper">
+      <div class="swiper-wrapper">
+        {% content_for "blocks" %}
+      </div>
+    </div>
+    <div class="collections-carousel__footer-wrapper">
+      {% if section.settings.button_link %}
+        <a
+          href="{{ section.settings.button_link }}"
+          class="collections-carousel__button"
+          aria-label="{{ section.settings.button_aria_label }}">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</collections-carousel>
+
+<script src="{{ 'collections-carousel.js' | asset_url }}" defer></script>
+{% schema %}
+  {
+    "name": "Collections Carousel",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Discover Our Collections"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "default": "See All Collections"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link",
+        "default": "/"
+      },
+      {
+        "type": "text",
+        "id": "button_aria_label",
+        "label": "Button aria-label",
+        "default": "See All Button"
+      }, {
+        "type": "header",
+        "content": "Colors"
+      }, {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#343D50"
+      }, {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "Button Text Color",
+        "default": "#000000"
+      }, {
+        "type": "color",
+        "id": "button_background_color",
+        "label": "Button Background Color",
+        "default": "#F8F8F9"
+      }, {
+        "type": "color",
+        "id": "button_border_color",
+        "label": "Button Border Color",
+        "default": "#CACACA"
+      }, {
+        "type": "color",
+        "id": "button_text_hover_color",
+        "label": "Button Text Color Hover",
+        "default": "#F8F8F9"
+      }, {
+        "type": "color",
+        "id": "button_background_hover_color",
+        "label": "Button Background Color Hover",
+        "default": "#000000"
+      }, {
+        "type": "color",
+        "id": "button_border_hover_color",
+        "label": "Button Border Color Hover",
+        "default": "#000000"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "carousel_collection"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collections Carousel",
+        "blocks": [
+          {
+            "type": "carousel_collection"
+          },
+          {
+            "type": "carousel_collection"
+          },
+          {
+            "type": "carousel_collection"
+          },
+          {
+            "type": "carousel_collection"
+          }, 
+          {
+            "type": "carousel_collection"
+          }, 
+          {
+            "type": "carousel_collection"
+          }, 
+          {
+            "type": "carousel_collection"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

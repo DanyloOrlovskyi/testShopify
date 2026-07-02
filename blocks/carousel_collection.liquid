@@ -1,0 +1,62 @@
+{% liquid
+  assign collection = block.settings.collection
+  assign collection_heading = collection.title | default: 'Collection'
+  assign collection_link = collection.url | default: '#'
+%}
+<a
+  href="{{ collection_link }}"
+  class="collections-carousel__slide-link"
+  aria-label="{{ collection_heading | escape }}">
+  <div class="collections-carousel__slide js-collections-carousel-slide">
+
+    <div class="collections-carousel__slide-image-wrapper">
+      {% if block.settings.background_image != blank %}
+        <picture>
+          <source media="(max-width: 768px)" srcset="
+          {{ block.settings.background_image | image_url: width: 509 }} 1x,
+          {{ block.settings.background_image | image_url: width: 1018 }} 2x" />
+          <source media="(max-width: 1280px)" srcset="
+          {{ block.settings.background_image | image_url: width: 272 }} 1x,
+          {{ block.settings.background_image | image_url: width: 544 }} 2x" />
+          <img
+            class="collections-carousel__slide-image js-collections-carousel-slide-image"
+            src="{{ block.settings.background_image | image_url: width: 233 }}"
+            srcset="
+            {{ block.settings.background_image | image_url: width: 233 }} 1x,
+            {{ block.settings.background_image | image_url: width: 466 }} 2x
+          "
+            alt="{{ collection_heading | escape  }}" />
+        </picture>
+      {% else %}
+        {{ 'collection-1' | placeholder_svg_tag: 'collections-carousel__slide-image' }}
+      {% endif %}
+    </div>
+    <div class="collections-carousel__slide-content">
+      <p class="collections-carousel__slide-heading" title="{{ collection_heading | escape }}">{{ collection_heading }}</p>
+    </div>
+
+  </div>
+</a>
+
+{% schema %}
+  {
+    "name": "Collection",
+    "class": "swiper-slide",
+    "settings": [
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      }, {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background Image"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection"
+      }
+    ]
+  }
+{% endschema %}
