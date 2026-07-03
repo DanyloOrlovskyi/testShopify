@@ -1,0 +1,199 @@
+{{ 'reviews-section.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign container_width = section.settings.container_width
+  assign desktop_offset_top = section.settings.desktop_offset_top
+  assign desktop_offset_bottom = section.settings.desktop_offset_bottom
+  assign mobile_offset_top = section.settings.mobile_offset_top
+  assign mobile_offset_bottom = section.settings.mobile_offset_bottom
+  assign background_image = section.settings.background_image
+  assign background_image_mobile = section.settings.background_image_mobile
+  assign background_overlay = section.settings.background_overlay
+  assign text_color = section.settings.text_color
+  assign author_role_color = section.settings.author_role_color
+%}
+
+<reviews-section 
+  hidden
+  class="reviews-section swiper"
+  style="
+    --container-width: {{ container_width }};
+    --desktop-offset-top: {{ desktop_offset_top }}px;
+    --desktop-offset-bottom: {{ desktop_offset_bottom }}px;
+    --mobile-offset-top: {{ mobile_offset_top }}px;
+    --mobile-offset-bottom: {{ mobile_offset_bottom }}px;
+    --color-background-overlay: {{ background_overlay }};
+    --color-text: {{ text_color }};
+    --color-role-author: {{ author_role_color }};
+  ">
+  <div class="reviews-section__inner-wrapper">
+    <div class="reviews-section__header">
+      <h2 class="reviews-section__header-title">
+        {{ section.settings.heading }}
+      </h2>
+    </div>
+    <div class="reviews-section__slider-wrapper swiper js-reviews-section-slider">
+      <div class="reviews-section__overlay">
+        <img 
+          class="reviews-section__overlay-image--mobile" 
+          src="{{ background_image_mobile | image_url: width: 375 }}"
+          srcset="
+            {{ background_image_mobile | image_url: width: 375 }} 1x,
+            {{ background_image_mobile | image_url: width: 750 }} 2x
+          "
+          loading="lazy"
+          alt="Background image mobile">
+        <img 
+          class="reviews-section__overlay-image"
+          src="{{ background_image | image_url: width: 1680 }}"
+          srcset="
+            {{ background_image | image_url: width: 1680 }} 1x,
+            {{ background_image | image_url: width: 3360 }} 2x
+          "
+          loading="lazy"
+          alt="Background image">
+      </div>
+      <div class="swiper-wrapper">
+        {% content_for "blocks" %}
+      </div>
+    </div>
+  </div>
+</reviews-section>
+
+<script src="{{ 'reviews-section.js' | asset_url }}" defer></script>
+
+{% schema %}
+
+  {
+    "name": "Reviews",
+    "blocks": [
+      {
+        "type": "review"
+      }
+    ],
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Feedback from our customers"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Background image"
+      },
+      {
+        "type": "image_picker",
+        "id": "background_image_mobile",
+        "label": "Background image mobile"
+      },
+      {
+        "type": "header",
+        "content": "Colors"
+      }, {
+        "type": "color_background",
+        "id": "background_overlay",
+        "label": "Background overlay",
+        "default": "rgba(35, 35, 35, 0.7)"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text",
+        "default": "#FFFFFF"
+      }, {
+        "type": "color",
+        "id": "author_role_color",
+        "label": "Author role",
+        "default": "#A1A1A1"
+      }, {
+        "type": "header",
+        "content": "Layout"
+      }, {
+        "type": "select",
+        "id": "container_width",
+        "label": "Container width",
+        "default": "inherit",
+        "options": [
+          {
+            "value": "inherit",
+            "label": "Inherit"
+          }, {
+            "value": "1920px",
+            "label": "1920px"
+          }, {
+            "value": "1680px",
+            "label": "1680px"
+          }, {
+            "value": "100%",
+            "label": "Full width"
+          }
+        ]
+      }, {
+        "type": "range",
+        "id": "desktop_offset_top",
+        "label": "Desktop offset top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1
+      }, {
+        "type": "range",
+        "id": "desktop_offset_bottom",
+        "label": "Desktop offset bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1
+      }, {
+        "type": "range",
+        "id": "mobile_offset_top",
+        "label": "Mobile offset top",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1
+      }, {
+        "type": "range",
+        "id": "mobile_offset_bottom",
+        "label": "Mobile offset bottom",
+        "default": 0,
+        "min": 0,
+        "max": 100,
+        "step": 1
+      }
+    ],
+    "presets": [
+      {
+        "name": "Reviews",
+        "blocks": [
+          {
+            "type": "review",
+            "settings": {
+              "text": "“I ordered a set for running and cycling, and honestly did not expect such high quality. The fabric is lightweight, breathable, and does not cause discomfort even in hot weather. I really appreciate that the clothing looks stylish, rather than like typical sportswear.”",
+              "author_name": "Rustam Musaev",
+              "author_role": "Senior SEO executive"
+            }
+          }, 
+          {
+            "type": "review",
+            "settings": {
+              "text": "“I ordered a set for running and cycling, and honestly did not expect such high quality. The fabric is lightweight, breathable, and does not cause discomfort even in hot weather. I really appreciate that the clothing looks stylish, rather than like typical sportswear.”",
+              "author_name": "Rustam Musaev",
+              "author_role": "Senior SEO executive"
+            }
+          },
+          {
+            "type": "review",
+            "settings": {
+              "text": "“I ordered a set for running and cycling, and honestly did not expect such high quality. The fabric is lightweight, breathable, and does not cause discomfort even in hot weather. I really appreciate that the clothing looks stylish, rather than like typical sportswear.”",
+              "author_name": "Rustam Musaev",
+              "author_role": "Senior SEO executive"
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+{% endschema %}

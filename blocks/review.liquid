@@ -1,0 +1,96 @@
+{% assign author_name = block.settings.author_name %}
+{% assign author_role = block.settings.author_role %}
+{% assign text = block.settings.text %}
+{% assign image = block.settings.image %}
+
+
+<div class="review-section__slide-inner-wrapper">
+  <div class="review-section__slide-image-wrapper">
+    {% if image != blank %}
+      <picture>
+        <source media="(max-width: 768px)" srcset="{{ image | image_url: width: 648, height: 648 }}">
+        <img
+          class="review-section__slide-image"
+          src="{{ image | image_url: width: 648, height: 648 }}"
+          srcset="
+          {{ image | image_url: width: 648, height: 648 }} 1x,
+          {{ image | image_url: width: 1296, height: 1296 }} 2x
+        "
+          loading="lazy"
+          alt="{{ author_name }}" />
+      </picture>
+    {% else %}
+      {{ 'hero-apparel-2' | placeholder_svg_tag: 'review-section__slide-image' }}
+    {% endif %}
+
+  </div>
+  <div class="review-section__slide-info">
+    <p class="review-section__slide-text">{{ text }}</p>
+    <div class="review-section__slide-controls">
+      <button class="review-section__slide-control-button js-review-section-slide-prev-button">
+        {{ 'icon-arrow-left.svg' | inline_asset_content }}
+      </button>
+      <div class="review-section__slide-author-info">
+        {% if image != blank %}
+          <img
+            class="review-section__slide-author-image"
+            src="{{ image | image_url: width: 56, height: 56 }}"
+            srcset="
+          {{ image | image_url: width: 56, height: 56 }} 1x,
+          {{ image | image_url: width: 112, height: 112 }} 2x
+        "
+            loading="lazy"
+            alt="{{ author_name }}">
+        {% else %}
+          {{ 'hero-apparel-2' | placeholder_svg_tag: 'review-section__slide-author-image' }}
+        {% endif %}
+        <div class="review-section__slide-author-info-text-wrapper">
+          <h3 class="review-section__slide-author-name">{{ author_name }}</h3>
+          <p class="review-section__slide-author-role">{{ author_role }}</p>
+        </div>
+      </div>
+      <button class="review-section__slide-control-button js-review-section-slide-next-button">
+        {{ 'icon-arrow-right.svg' | inline_asset_content }}
+      </button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Review",
+    "class": "swiper-slide review-section__slide",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      }, {
+        "type": "text",
+        "id": "author_name",
+        "label": "Author name",
+        "default": "Rustam Musaev"
+      }, {
+        "type": "text",
+        "id": "author_role",
+        "label": "Author role",
+        "default": "Senior SEO executive"
+      }, {
+        "type": "textarea",
+        "id": "text",
+        "label": "Text",
+        "default": "“I ordered a set for running and cycling, and honestly did not expect such high quality. The fabric is lightweight, breathable, and does not cause discomfort even in hot weather. I really appreciate that the clothing looks stylish, rather than like typical sportswear.”"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Review",
+        "settings": {
+          "text": "“I ordered a set for running and cycling, and honestly did not expect such high quality. The fabric is lightweight, breathable, and does not cause discomfort even in hot weather. I really appreciate that the clothing looks stylish, rather than like typical sportswear.”",
+          "author_name": "Rustam Musaev",
+          "author_role": "Senior SEO executive"
+        }
+      }
+    ]
+  }
+{% endschema %}
