@@ -11,7 +11,10 @@
       3. Additional variants load on-demand via @font-face
     {% endcomment %}
     {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+      <link
+        rel="preconnect"
+        href="https://fonts.shopifycdn.com"
+        crossorigin>
 
       {% comment %} Preload the base font variant for initial page render {% endcomment %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
@@ -19,6 +22,8 @@
 
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
@@ -32,5 +37,7 @@
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
   </body>
 </html>
