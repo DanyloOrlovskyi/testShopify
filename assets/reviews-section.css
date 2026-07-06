@@ -127,7 +127,6 @@
     justify-content: center;
     flex-wrap: nowrap;
     width: fit-content;
-    gap: 12px;
     max-width: 100%;
     margin: 48px auto 0;
     padding: 8px;
@@ -135,6 +134,7 @@
     background: linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12));
     backdrop-filter: blur(100px) saturate(180%);
     -webkit-backdrop-filter: blur(100px) saturate(180%);
+    will-change: width;
 }
 
 .review-section__slide-controls::before{
@@ -188,6 +188,7 @@ svg.review-section__slide-author-image{
     position: relative;
     overflow: hidden;
     isolation: isolate;
+    padding: 0;
     flex-shrink: 0;
     width: 0;
     height: 48px;
@@ -222,12 +223,18 @@ svg.review-section__slide-author-image{
     pointer-events: none;
     z-index: 2;
 }
-
 .review-section__slide-controls:hover .review-section__slide-control-button{
     width: 48px;
     border-width: 1px;
     opacity: 1;
     pointer-events: auto;
+}
+
+.review-section__slide-controls:hover .review-section__slide-control-button--prev{
+    margin-right: 12px;
+}
+.review-section__slide-controls:hover .review-section__slide-control-button--next{
+    margin-left: 12px;
 }
 
 .review-section__slide-control-button:hover{
