@@ -31,7 +31,8 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "social": "Social"
   },
   "labels": {
     "alignment": "Alignment",

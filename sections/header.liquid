@@ -30,6 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 36px;
   }
   header a {
     position: relative;
@@ -53,14 +54,14 @@
 {% endstylesheet %}
 
 {% schema %}
-{
-  "name": "t:general.header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    }
-  ]
-}
+  {
+    "name": "t:general.header",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "t:labels.menu"
+      }
+    ]
+  }
 {% endschema %}
