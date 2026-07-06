@@ -1,0 +1,32 @@
+<ul class="socials-list">
+  {% if settings.facebook_link != blank %}
+    <li class="socials-list__item">
+      <a
+        class="socials-list__item-link"
+        href="{{ settings.facebook_link }}"
+        target="_blank">
+        {{ 'icon-facebook.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.instagram_link != blank %}
+    <li class="socials-list__item">
+      <a
+        class="socials-list__item-link"
+        href="{{ settings.instagram_link }}"
+        target="_blank">
+        {{ 'icon-instagram.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+  {% if settings.pinterest_link != blank %}
+    <li class="socials-list__item">
+      <a
+        class="socials-list__item-link"
+        href="{{ settings.pinterest_link }}"
+        target="_blank">
+        {{ 'icon-pinterest.svg' | inline_asset_content }}
+      </a>
+    </li>
+  {% endif %}
+</ul>

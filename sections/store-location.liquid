@@ -1,0 +1,67 @@
+{{ 'store-location.css' | asset_url | stylesheet_tag }}
+
+<div class="store-location">
+  <div class="store-location__inner-wrapper">
+    <div class="store-location__socials-block">
+      {% if section.settings.heading != blank %}
+        <h2 class="store-location__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <div class="store-location__subheading">{{ section.settings.subheading }}</div>
+      {% endif %}
+      {% if section.settings.show_socials %}
+        <div class="store-location__socials-wrapper">
+          {% render "socials" %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="store-location__contact-info">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Contact information",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Still need help?"
+      }, {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "Subheading",
+        "default": "<p>Didn't find the answer to your question?</p>"
+      }, {
+        "type": "checkbox",
+        "id": "show_socials",
+        "label": "Show socials",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "contact-information"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Contact information",
+        "blocks": [
+          {
+            "type": "contact-information"
+          }, {
+            "type": "contact-information"
+          }, {
+            "type": "contact-information"
+          }, {
+            "type": "contact-information"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
